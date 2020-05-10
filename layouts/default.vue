@@ -58,9 +58,29 @@ export default {
           to: "/"
         },
         {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire"
+          icon: "mdi-compass-outline",
+          title: "Tours",
+          to: "/tours"
+        },
+        {
+          icon: "mdi-motorbike",
+          title: "Bikes",
+          to: "/bikes"
+        },
+        {
+          icon: "mdi-image-multiple",
+          title: "Gallery",
+          to: "/gallery"
+        },
+        {
+          icon: "mdi-account",
+          title: "About Us",
+          to: "/about"
+        },
+        {
+          icon: "mdi-book-open",
+          title: "Reservation",
+          to: "/reservation"
         }
       ],
       miniVariant: false,
