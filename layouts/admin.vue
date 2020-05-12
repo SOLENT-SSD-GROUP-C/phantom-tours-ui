@@ -74,9 +74,9 @@
     </v-app-bar>
 
     <!-- Contents goes here -->
-    <v-content>
-      <v-container class="px-10">
-        <nuxt class="px-10" />
+    <v-content class="grey lighten-5">
+      <v-container class="px-10 grey lighten-5">
+        <nuxt class="px-10 grey lighten-5" />
       </v-container>
     </v-content>
   </v-app>

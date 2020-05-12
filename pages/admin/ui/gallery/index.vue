@@ -1,10 +1,23 @@
 <template>
-  <div>
-    <h1>Admin UI - Gallery Page</h1>
-    <p>Renders gallery</p>
-  </div>
+  <v-app class="mx-5">
+    <h1 class="display-1 my-5 font-weight-light">Manage Gallery</h1>
+    <v-row>
+      <gallery-item></gallery-item>
+      <gallery-item></gallery-item>
+      <gallery-item></gallery-item>
+      <gallery-item></gallery-item>
+      <gallery-item></gallery-item>
+      <gallery-item></gallery-item>
+    </v-row>
+  </v-app>
 </template>
 
 <script>
-export default { layout: "admin" };
+import GalleryItem from "@/components/admin/gallery/GalleryItem";
+export default {
+  layout: "admin",
+  components: {
+    galleryItem: GalleryItem
+  }
+};
 </script>
