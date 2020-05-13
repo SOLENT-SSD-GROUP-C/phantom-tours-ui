@@ -1,17 +1,13 @@
 <template>
-  <v-app>
-    <!-- Navigation drawer -->
+  <v-app id="inspire">
+    <!-- SIDE NAV -->
     <v-navigation-drawer
+      class="grey lighten-5"
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
+      :clipped="$vuetify.breakpoint.lgAndUp"
       app
-      color="pink"
-      dark
     >
-      <v-list>
-        <!-- User avatar, name, and email -->
+      <v-list dense>
         <v-list-item>
           <v-list-item-avatar>
             <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
@@ -22,61 +18,66 @@
             <v-list-item-subtitle>iam.amanxz@gmail.com</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
+        <template v-for="item in items">
+          <v-row v-if="item.heading" :key="item.heading" align="left"></v-row>
 
-        <!--Page Links -->
-        <v-list-item v-for="(item, i) in navListItems" :key="i" :to="item.to" router exact>
-          <v-list-item-action>
-            <v-icon class="title">{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" class="subtitle-2" />
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-group group value="true">
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title class="white--text subtitle-2">Manage UI</v-list-item-title>
-            </v-list-item-content>
-          </template>
-
-          <v-list-item
-            v-for="(item, i) in navListUiItems"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-            active-class="active-back-transparent"
+          <!-- MANAGE UI ITEMS -->
+          <v-list-group
+            v-else-if="item.children"
+            :key="item.text"
+            v-model="item.model"
+            :prepend-icon="item.model ? item.icon : item['icon-alt']"
+            append-icon
+            class="red--text accent-3"
           >
-            <v-list-item-icon>
-              <v-icon v-text="item.icon" class="title"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-title v-text="item.title" class="subtitle-2"></v-list-item-title>
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.text }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item v-for="(child, i) in item.children" :key="i" link :to="child.to" router>
+              <v-list-item-action v-if="child.icon">
+                <v-icon>{{ child.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ child.text }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <!-- ABOVE ITEMS -->
+          <v-list-item v-else :key="item.text" link :to="item.to" router>
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
-        </v-list-group>
+        </template>
       </v-list>
     </v-navigation-drawer>
 
-    <!-- App bar -->
-    <v-app-bar :clipped-left="clipped" fixed app dense hide-on-scroll flat class="px-5">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-
+    <!-- NAV BAR -->
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="red accent-3" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span class="hidden-sm-and-down">Admin Dashboard</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
-            <v-icon>mdi-logout</v-icon>
+            <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
         </template>
         <span>Logout</span>
       </v-tooltip>
     </v-app-bar>
 
-    <!-- Contents goes here -->
-    <v-content class="grey lighten-5">
-      <v-container class="px-10 grey lighten-5">
-        <nuxt class="px-10 grey lighten-5" />
+    <!-- PAGE CONTENTS -->
+    <v-content>
+      <v-container class="px-10">
+        <nuxt class="px-10" />
       </v-container>
     </v-content>
   </v-app>
@@ -84,66 +85,40 @@
 
 <script>
 export default {
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      navListItems: [
-        {
-          icon: "mdi-account-group",
-          title: "Users",
-          to: "/admin/users"
-        },
-        {
-          icon: "mdi-airport",
-          title: "Tours",
-          to: "/admin/tours"
-        },
-        {
-          icon: "mdi-motorbike",
-          title: "Bikes",
-          to: "/admin/bikes"
-        },
-        {
-          icon: "mdi-laptop-chromebook",
-          title: "Bookings",
-          to: "/admin/bookings"
-        },
-        {
-          icon: "mdi-comment-quote",
-          title: "Feedbacks",
-          to: "/admin/feedbacks"
-        }
-      ],
-      navListUiItems: [
-        {
-          icon: "mdi-image",
-          title: "Manage Gallery",
-          to: "/admin/ui/gallery"
-        },
-        {
-          icon: "mdi-information",
-          title: "Manage Testimonials",
-          to: "/admin/ui/testimonials"
-        },
-        {
-          icon: "mdi-folder-multiple-image",
-          title: "Manage Carousals",
-          to: "/admin/ui/carousels"
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      title: "Admin Dashboard"
-    };
-  }
+  props: {
+    source: String
+  },
+  data: () => ({
+    drawer: null,
+    items: [
+      { icon: "mdi-account-group", text: "Users", to: "/admin/users" },
+      { icon: "mdi-airport", text: "Tours", to: "/admin/tours" },
+      { icon: "mdi-motorbike", text: "Bikes", to: "/admin/bikes" },
+      {
+        icon: "mdi-laptop-chromebook",
+        text: "Bookings",
+        to: "/admin/bookings"
+      },
+      { icon: "mdi-comment-quote", text: "Feedbacks", to: "/admin/feedbacks" },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-chevron-down",
+        text: "Manage UI",
+        model: true,
+        children: [
+          {
+            icon: "mdi-image",
+            text: "Manage Gallery",
+            to: "/admin/ui/gallery"
+          },
+          {
+            icon: "mdi-folder-multiple-image",
+            text: "Manage Carousel",
+            to: "/admin/ui/carousels"
+          }
+        ]
+      }
+    ]
+  })
 };
 </script>
-
-<style scoped>
-.active-back-transparent {
-  background-color: rgba(255, 255, 255, 0.025);
-  color: white;
-}
-</style>
