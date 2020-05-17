@@ -9,24 +9,18 @@
         
         <br>
         
-          <h1>Featured Tours</h1>
-        <v-row>
-            <app-tour-list></app-tour-list>
-            <app-tour-list></app-tour-list>
-            <app-tour-list></app-tour-list>
-        </v-row>
+        <h1>Featured Tours</h1>
+          <app-tour-list></app-tour-list>
+
         <div class="text-center  my-10">
           <v-btn rounded color="red" to="/tours" dark flat>View More</v-btn>
         </div>
         <v-divider></v-divider>
         <br>
         <h1>Testimonials</h1>
-        <v-row>
+       
           <app-testimonials></app-testimonials>
-          <app-testimonials></app-testimonials>
-          <app-testimonials></app-testimonials>
-          <app-testimonials></app-testimonials>
-        </v-row>
+       
       </v-container>
      </v-app>
     

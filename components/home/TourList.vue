@@ -1,31 +1,57 @@
 <template>
-  <v-col xs="12" md="4">
-    <v-card class="mx-auto" max-width="400">
-      <v-img
-        class="white--text align-end"
-        height="200px"
-        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-      >
-        <v-card-title>Top 10 Australian beaches</v-card-title>
-      </v-img>
+  <v-row dense>
+    <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+      <v-card>
+        <v-img
+          :src="card.src"
+          class="white--text align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          height="200px"
+        >
+          <v-card-title v-text="card.title"></v-card-title>
+        </v-img>
 
-      <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-      <v-card-text class="text--primary">
-        <div>Whitehaven Beach</div>
-
-        <div>Whitsunday Island, Whitsunday Islands</div>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-btn color="orange" text>Read More</v-btn>
-      </v-card-actions>
-    </v-card>
-    
-  </v-col>
-  
+        <v-card-text class="text--primary" v-text="card.text"></v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="blue"
+            text
+            :to="card.link"
+          >
+            View More
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    cards: [
+      {
+        title: "Tour Location",
+        src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
+        text: "Tour 1",
+        link: "#1",
+        flex: 4
+      },
+      {
+        title: "Favorite road Tour",
+        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+        text: "Tour 2",
+        link: "#2",
+        flex: 4
+      },
+      {
+        title: "Best Tour",
+        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+        text: "Tour 3",
+        link: "#3",
+        flex: 4
+      }
+    ]
+  })
+};
 </script>
