@@ -16,9 +16,10 @@
           <v-btn rounded color="red" to="/tours" dark flat>View More</v-btn>
         </div>
         <v-divider></v-divider>
+
         <br>
+
         <h1>Testimonials</h1>
-       
           <app-testimonials></app-testimonials>
        
       </v-container>
