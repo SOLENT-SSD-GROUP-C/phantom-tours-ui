@@ -93,6 +93,7 @@ export default {
     items: [
       { icon: "mdi-account-group", text: "Users", to: "/admin/users" },
       { icon: "mdi-airport", text: "Tours", to: "/admin/tours" },
+      { icon: "mdi-airport", text: "Rideouts", to: "/admin/rideouts" },
       { icon: "mdi-motorbike", text: "Bikes", to: "/admin/bikes" },
       {
         icon: "mdi-laptop-chromebook",

@@ -1,16 +1,9 @@
 import Vuex from "vuex";
-import * as bikes from "./modules/bikes";
-import * as tours from "./modules/tours";
+import modules from "./modules";
 
-new Vuex.Store({
-  modules: {
-    a: bikes,
-    b: tours
-  },
-  state: {
-    count: 2
-  },
-  mutations: {},
-  getters: {},
-  actions: {}
-});
+const createStore = () => {
+  return new Vuex.Store({
+    modules
+  });
+};
+export default createStore;

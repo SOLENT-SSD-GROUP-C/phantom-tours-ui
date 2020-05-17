@@ -1,44 +1,63 @@
-import axios from "axios";
+import http from "../../http-common";
 
-export const state = () => ({
-  loadedBikes: [
-    {
-      id: "1",
-      name: "Pulsar",
-      year: 2020
+export default {
+  namespaced: true,
+  state: {
+    loadedBikes: []
+  },
+  mutations: {
+    INIT_BIKES: (state, bikes) => (state.loadedBikes = bikes),
+    ADD_BIKE: (state, payload)=> {
+      state.loadedBikes.push(payload);
     },
-    {
-      id: "2",
-      name: "Discover",
-      year: 2018
+    REMOVE_BIKE: (state, bikeId) =>
+      (state.loadedBikes = state.loadedBikes.filter(
+        bike => bike.bikeId !== bikeId
+      ))
+  },
+  actions: {
+    async fetchBikes({ commit }) {
+      await http
+        .get("/bikes")
+        .then(response => {
+          commit("INIT_BIKES", response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    async createBike({ commit }, payload) {
+      const bike = {
+        bikeName: payload.bikeName,
+        bikeDescription: payload.bikeDescription,
+        bikeImageLink: payload.bikeImageLink
+      };
+
+      await http
+        .post("/bikes", bike)
+        .then(response => {
+          commit("ADD_BIKE", response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    async deleteBike({ commit }, bikeId) {
+      await http.delete(`/bikes/${bikeId}`);
+      commit("REMOVE_BIKE", bikeId);
     }
-  ]
-});
+  },
+  getters: {
+    loadedBikes(state) {
+      return state.loadedBikes;
+    },
 
-export const mutations = {
-  INIT_BIKES: (state, bikes) => (state.loadedBikes = bikes),
-
-  ADD_BIKE: (state, bike) => state.loadedBikes.push(bike),
-
-  REMOVE_BIKE: (state, id) =>
-    (state.loadedBikes = state.loadedBikes.filter(bike => bike.id !== id)),
-
-  UPDATE_NOTE: (state, updates) => {
-    const index = state.loadedBikes.findIndex(bike => bike.id === updates.id);
-
-    if (index !== -1) {
-      state.loadedBikes.splice(index, 1, updates);
+    loadedBike(state) {
+      return bikeId => {
+        return state.loadedBikes.find(bike => {
+          return bike.bikeId === bikeId;
+        });
+      };
     }
   }
 };
-
-export const actions = {
-  async fetchBikes({ commit }) {
-    //  Fetch from Database
-    commit("INIT_BIKES", response.data);
-  }
-};
-
-export const getters = () => {};
-
-export default { state, mutations, actions, getters };
