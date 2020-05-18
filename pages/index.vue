@@ -35,10 +35,12 @@ import ImageSlider from "@/components/home/ImageSlider.vue";
 import TourList from "@/components/home/TourList.vue";
 import Testimonials from "@/components/home/Testimonials.vue";
 export default {
+  
   components: {
     appSlider: ImageSlider,
     appTourList: TourList,
     appTestimonials: Testimonials,
+    
   }
 };
 </script>

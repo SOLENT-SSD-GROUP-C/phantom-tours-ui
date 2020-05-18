@@ -1,20 +1,8 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -24,13 +12,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app flat="">
+    <v-app-bar :clipped-left="clipped" fixed app text>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title class="font-weight-thin grey--text"
-        >PHANTOM<span class="font-weight-bold grey--text"
-          >TOURS</span
-        ></v-toolbar-title
-      >
+      <v-toolbar-title class="font-weight-thin grey--text">
+        PHANTOM
+        <span class="font-weight-bold grey--text">TOURS</span>
+      </v-toolbar-title>
       <v-spacer />
     </v-app-bar>
     <v-content>
@@ -76,6 +63,11 @@ export default {
           icon: "mdi-account",
           title: "About Us",
           to: "/about"
+        },
+        {
+          icon: "mdi-message-draw",
+          title: "Contact Us",
+          to: "/contact"
         },
         {
           icon: "mdi-book-open",
