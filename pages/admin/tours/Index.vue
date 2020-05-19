@@ -103,7 +103,6 @@
           <v-card>
             <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
               <v-card-title>{{tour.tourTitle}}</v-card-title>
-              <v-card-title>{{tour.tourId}}</v-card-title>
             </v-img>
 
             <v-card-subtitle

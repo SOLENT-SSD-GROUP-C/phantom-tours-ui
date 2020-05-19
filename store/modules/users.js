@@ -9,7 +9,15 @@ export default {
   mutations: {
     INIT_USERS: (state, users) => (state.loadedUsers = users),
     ADD_USER: (state, payload) => {
-      state.loadedAdmins.push(payload);
+      state.loadedUsers.push(payload);
+    },
+    UPDATE_USER: (state, payload) => {
+      const index = state.loadedUsers.findIndex(
+        user => user.userId === payload.userId
+      );
+      if (index !== -1) {
+        state.loadedUsers.splice(index, 1, payload);
+      }
     },
     REMOVE_USER: (state, userId) =>
       (state.loadedUsers = state.loadedUsers.filter(
@@ -34,7 +42,10 @@ export default {
       const response = await http.post("/users", user);
       commit("ADD_USER", response.data);
     },
-
+    async updateUser({ commit }, { userId, payload }) {
+      await http.put(`/users/${userId}`, payload);
+      commit("UPDATE_USER", payload);
+    },
     async deleteUser({ commit }, userId) {
       await http.delete(`/users/${userId}`);
       commit("REMOVE_USER", userId);

@@ -2,22 +2,12 @@
   <v-app id="inspire">
     <!-- SIDE NAV -->
     <v-navigation-drawer
-      class="grey lighten-5"
+      class="grey lighten-3"
       v-model="drawer"
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
     >
       <v-list dense>
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-          </v-list-item-avatar>
-
-          <v-list-item-content>
-            <v-list-item-title class="title">Husnul Aman</v-list-item-title>
-            <v-list-item-subtitle>iam.amanxz@gmail.com</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
         <template v-for="item in items">
           <v-row v-if="item.heading" :key="item.heading" align="left"></v-row>
 
@@ -28,7 +18,7 @@
             v-model="item.model"
             :prepend-icon="item.model ? item.icon : item['icon-alt']"
             append-icon
-            class="red--text accent-3"
+            class="black--text"
           >
             <template v-slot:activator>
               <v-list-item-content>
@@ -58,7 +48,7 @@
     </v-navigation-drawer>
 
     <!-- NAV BAR -->
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="red accent-3" dark>
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="grey darken-4" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Admin Dashboard</span>
@@ -97,8 +87,13 @@ export default {
       { icon: "mdi-motorbike", text: "Bikes", to: "/admin/bikes" },
       {
         icon: "mdi-laptop-chromebook",
-        text: "Bookings",
-        to: "/admin/bookings"
+        text: "Reservations",
+        to: "/admin/reservations"
+      },
+      {
+        icon: "mdi-cloud-question",
+        text: "Inquiries",
+        to: "/admin/inquiries"
       },
       { icon: "mdi-comment-quote", text: "Feedbacks", to: "/admin/feedbacks" },
       {

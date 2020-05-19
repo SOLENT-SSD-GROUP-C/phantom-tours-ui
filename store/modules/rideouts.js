@@ -63,6 +63,7 @@ export default {
   getters: {
     loadedRideouts(state) {
       return state.loadedRideouts;
-    }
+    },
+    rideout: state => id => state.loadedRideouts.find(r => r.rideoutId === id)
   }
 };

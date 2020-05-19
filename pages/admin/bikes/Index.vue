@@ -35,9 +35,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import http from "../../../http-common";
-
 export default {
   layout: "admin",
   computed: {

@@ -58,12 +58,6 @@ export default {
       };
 
       const response = await http.post("/tours", tour);
-      // .then(response => {
-      //
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
       commit("ADD_TOUR", response.data);
     },
     async updateTour({ commit }, { tourId, payload }) {
@@ -80,19 +74,6 @@ export default {
       return state.loadedTours;
     },
 
-    loadedTour(state) {
-      return tourId => {
-        return state.loadedTours.find(tour => {
-          return tour.tourId === tourId;
-        });
-      };
-    },
-    selectedTour(state) {
-      return tourId => {
-        if (state.loadedTours.hasOwnProperty(tourId)) {
-          return state.loadedTours[tourId].map(id => state.loadedTours[id]);
-        }
-      };
-    }
+    tour: state => id => state.loadedTours.find(t => t.tourId === id)
   }
 };
