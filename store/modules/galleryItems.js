@@ -18,28 +18,16 @@ export default {
   },
   actions: {
     async fetchGalleryItems({ commit }) {
-      await http
-        .get("/galleryItems")
-        .then(response => {
-          commit("INIT_GALLERY_ITEMS", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.get("/galleryItems");
+      commit("INIT_GALLERY_ITEMS", response.data);
     },
     async createGalleryItem({ commit }, payload) {
       const galleryItem = {
         galleryImageLink: payload.galleryImageLink
       };
 
-      await http
-        .post("/galleryItems", galleryItem)
-        .then(response => {
-          commit("ADD_GALLERY_ITEM", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.post("/galleryItems", galleryItem);
+      commit("ADD_GALLERY_ITEM", response.data);
     },
     async deleteGalleryItem({ commit }, galleryItemId) {
       await http.delete(`/galleryItems/${galleryItemId}`);

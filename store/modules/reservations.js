@@ -18,7 +18,7 @@ export default {
   },
   actions: {
     async fetchReservations({ commit }) {
-      const response = await http.get("/reservations");
+      const response = await http.get("reservations");
       console.log("Res data" + response.data);
 
       commit("INIT_RESERVATIONS", response.data);
@@ -30,26 +30,24 @@ export default {
         userEmail: payload.userEmail,
         userPhone: payload.userPhone
       };
-
-      console.log(payload);
       if (payload.tourId) {
         const tourId = payload.tourId;
         const response = await http.post(
-          `/tours/${tourId}/reservations`,
+          `tours/${tourId}/reservations`,
           reservation
         );
         commit("ADD_RESERVATION", response.data);
       } else {
         const rideoutId = payload.rideoutId;
         const response = await http.post(
-          `/rideouts/${rideoutId}/reservations`,
+          `rideouts/${rideoutId}/reservations`,
           reservation
         );
         commit("ADD_RESERVATION", response.data);
       }
     },
     async deleteReservation({ commit }, reservationId) {
-      await http.delete(`/reservations/${reservationId}`);
+      await http.delete(`reservations/${reservationId}`);
       commit("REMOVE_RESERVATION", reservationId);
     }
   },

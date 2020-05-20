@@ -3,10 +3,17 @@
     <v-card outlined width="98%" class="pa-3">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="headline">Write a feedback</v-list-item-title>
+          <v-list-item-title class="headline"
+            >Write a feedback</v-list-item-title
+          >
           <v-form ref="form" @submit.prevent="onCreateFeedback">
             <v-row class="px-3">
-              <v-textarea v-model="feedbackBody" auto-grow label="Feedback" counter="500"></v-textarea>
+              <v-textarea
+                v-model="feedbackBody"
+                auto-grow
+                label="Feedback"
+                counter="500"
+              ></v-textarea>
             </v-row>
             <v-row class="pa-3">
               <v-rating
@@ -41,13 +48,19 @@ export default {
       const feedback = {
         tourId: this.tour.tourId,
         feedbackStars: this.rating,
-        feedbackBody: this.feedbackBody
+        feedbackBody: this.feedbackBody,
+        username: this.currentUser.username
       };
       this.$store.dispatch("feedbacks/createFeedback", feedback);
       this.$refs.form.reset();
 
       // console.log(this.tour.tourId);
       // console.log(feedback);
+    }
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
     }
   }
 };

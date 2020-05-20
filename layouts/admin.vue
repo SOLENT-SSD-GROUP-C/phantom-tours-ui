@@ -48,19 +48,31 @@
     </v-navigation-drawer>
 
     <!-- NAV BAR -->
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="grey darken-4" dark>
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="grey darken-4 px-10" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Admin Dashboard</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <div class="font-weight-regualar grey--text">
+        Logged in as
+        <span class="font-weight-bold white--text">{{ currentUser.username }}</span>
+      </div>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
+          <v-btn icon v-on="on" @click.prevent="logOut">
             <v-icon>mdi-logout-variant</v-icon>
           </v-btn>
         </template>
         <span>Logout</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on" @click="$router.push('/')">
+            <v-icon>mdi-home</v-icon>
+          </v-btn>
+        </template>
+        <span>Home</span>
       </v-tooltip>
     </v-app-bar>
 
@@ -115,6 +127,17 @@ export default {
         ]
       }
     ]
-  })
+  }),
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
+    }
+  }
 };
 </script>

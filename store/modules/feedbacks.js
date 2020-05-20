@@ -18,19 +18,16 @@ export default {
   actions: {
     async fetchFeedbacks({ commit }) {
       const response = await http.get("/feedbacks");
-
       commit("INIT_FEEDBACKS", response.data);
     },
     async createFeedback({ commit }, payload) {
       const tourId = payload.tourId;
-
       const feedback = {
         feedbackStars: payload.feedbackStars,
-        feedbackBody: payload.feedbackBody
+        feedbackBody: payload.feedbackBody,
+        username: payload.username
       };
-
       const response = await http.post(`/tours/${tourId}/feedbacks`, feedback);
-
       commit("ADD_FEEDBACK", response.data);
     },
     async deleteFeedback({ commit }, feedbackId) {

@@ -24,7 +24,7 @@
             <v-img
               class="white--text align-end"
               height="200px"
-              src="https://razorpay.com/learn-content/uploads/2019/09/register-company-online.png"
+              src="https://i.imgur.com/A4Wlj5G.jpg"
             ></v-img>
 
             <v-card-text class="text--primary headline"></v-card-text>

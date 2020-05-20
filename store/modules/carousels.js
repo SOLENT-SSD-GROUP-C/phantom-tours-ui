@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "@/http-common";
 
 export default {
   namespaced: true,
@@ -17,31 +17,19 @@ export default {
   },
   actions: {
     async fetchCarousels({ commit }) {
-      await http
-        .get("/carousels")
-        .then(response => {
-          commit("INIT_CAROUSELS", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.get("carousels");
+      commit("INIT_CAROUSELS", response.data);
     },
     async createCarousel({ commit }, payload) {
       const carousel = {
         carouselImageLink: payload.carouselImageLink
       };
 
-      await http
-        .post("/carousels", carousel)
-        .then(response => {
-          commit("ADD_CAROUSEL", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.post("carousels", carousel);
+      commit("ADD_CAROUSEL", response.data);
     },
     async deleteCarousel({ commit }, carouselId) {
-      await http.delete(`/carousels/${carouselId}`);
+      await http.delete(`carousels/${carouselId}`);
       commit("REMOVE_CAROUSEL", carouselId);
     }
   },

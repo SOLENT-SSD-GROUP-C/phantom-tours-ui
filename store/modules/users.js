@@ -38,7 +38,6 @@ export default {
         userPassword: payload.userPassword,
         userRole: payload.userRole
       };
-
       const response = await http.post("/users", user);
       commit("ADD_USER", response.data);
     },

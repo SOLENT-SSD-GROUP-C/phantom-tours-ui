@@ -17,8 +17,11 @@
           <tbody>
             <tr v-for="reservation in reservations" :key="reservation.reservationId">
               <td>{{ reservation.userFullName }}</td>
-              <td v-if="reservation.tour !== null">{{ reservation.tour.tourTitle}}</td>
-              <td v-else>{{ reservation.rideout.rideoutTitle}}</td>
+              <div v-if="reservation.tour || reservation.rideout">
+                <td v-if="reservation.tour !== null">{{ reservation.tour.tourTitle}}</td>
+                <td v-else>{{ reservation.rideout.rideoutTitle}}</td>
+              </div>
+
               <td>{{ reservation.reservationType }}</td>
               <td>{{ reservation.userEmail }}</td>
               <td>{{ reservation.userPhone }}</td>

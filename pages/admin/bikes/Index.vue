@@ -4,7 +4,7 @@
       <v-row align="end" class="my-2">
         <h1 class="display-1 font-weight-light">Manage Bikes</h1>
         <v-spacer></v-spacer>
-        <v-btn text class="primary" to="/admin/bikes/createBike">Add Bike</v-btn>
+        <v-btn text class="primary" @click="createDialog=true">Add Bike</v-btn>
       </v-row>
 
       <v-row>
@@ -30,6 +30,31 @@
           </v-row>
         </v-card>
       </v-row>
+
+      <!-- CREATE BIKE FORM -->
+      <v-row justify="center">
+        <v-dialog v-model="createDialog" persistent max-width="600px">
+          <v-card>
+            <v-card-title>Add Bike</v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-form ref="form" @submit.prevent="onCreateBike">
+                  <v-text-field v-model="bikeName" label="Title" required></v-text-field>
+                  <v-textarea v-model="bikeDescription" label="Description" counter="1000"></v-textarea>
+                  <v-text-field
+                    v-model="bikeImageLink"
+                    label="Bike Image Link"
+                    required
+                    counter="250"
+                  ></v-text-field>
+                  <v-btn class="primary mt-3" type="submit">Save</v-btn>
+                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                </v-form>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-container>
   </v-app>
 </template>
@@ -37,12 +62,34 @@
 <script>
 export default {
   layout: "admin",
+  data() {
+    return {
+      createDialog: false,
+      bikeName: "",
+      bikeDescription: "",
+      bikeImageLink: ""
+    };
+  },
   computed: {
     bikes() {
       return this.$store.getters["bikes/loadedBikes"];
     }
   },
   methods: {
+    cancelForm() {
+      this.$refs.form.reset();
+      this.createDialog = false;
+    },
+    onCreateBike() {
+      const bikeData = {
+        bikeName: this.bikeName,
+        bikeDescription: this.bikeDescription,
+        bikeImageLink: this.bikeImageLink
+      };
+      this.$store.dispatch("bikes/createBike", bikeData);
+      this.$router.push("/admin/bikes");
+      this.cancelForm();
+    },
     deleteBike(id) {
       this.$store.dispatch("bikes/deleteBike", id);
     }

@@ -93,7 +93,7 @@
         <v-col cols="12" md="9">
           <v-img height="350px" :src="tour.tourLocationImageLink"></v-img>
           <p class="pt-3">{{tour.tourDescription}}</p>
-          <v-btn class="primary" block text @click="bookDialog = true">Book This Tour</v-btn>
+          <v-btn class="primary" block text @click="onClickBook">Book This Tour</v-btn>
         </v-col>
       </v-row>
       <v-row>
@@ -103,7 +103,9 @@
       </v-row>
 
       <!-- FEEDBACK FORM -->
-      <app-feedback-form :tour="tour"></app-feedback-form>
+      <div v-if="currentUser">
+        <app-feedback-form :tour="tour"></app-feedback-form>
+      </div>
 
       <!-- BOOK DIALOG -->
       <v-row justify="center">
@@ -149,6 +151,13 @@ export default {
       this.$refs.form.reset();
       this.bookDialog = false;
     },
+    onClickBook() {
+      if (this.currentUser) {
+        this.bookDialog = true;
+      } else {
+        this.$router.push("/login");
+      }
+    },
     onCreateReservation() {
       const reservation = {
         tourId: this.tour.tourId,
@@ -168,6 +177,9 @@ export default {
   computed: {
     tour() {
       return this.$store.getters["tours/tour"](parseInt(this.$route.params.id));
+    },
+    currentUser() {
+      return this.$store.state.auth.user;
     }
   }
 };

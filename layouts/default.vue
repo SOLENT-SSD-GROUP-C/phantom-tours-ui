@@ -10,25 +10,34 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>mdi-account-tie</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <router-link style="cursor:pointer" to="/admin/users">Administrator</router-link>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar
       :clipped-left="clipped"
       fixed
+      height="90"
       app
-      dense
       flat
       dark
       hide-on-scroll
-      class="red accent-3 px-10"
+      class="pink accent-3 px-10"
     >
       <div></div>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up" />
 
       <router-link to="/" tag="span" exact style="cursor:pointer">
         <v-toolbar-title
-          class="font-weight-regular title white--text"
+          class="font-weight-regular title white--text hidden-xs-only"
           link
           to="/"
           router
@@ -41,34 +50,85 @@
 
       <v-spacer />
 
-      <div class="hidden-xs-only">
-        <v-btn text v-for="(item, i) in items" :key="i" :to="item.to" router exact>{{item.title}}</v-btn>
-      </div>
+      <v-list class="transparent" dense flat dark>
+        <v-list-item>
+          <v-spacer></v-spacer>
+          <div v-if="!currentUser" class="navbar-nav ml-auto">
+            <v-btn small text to="/register" router exact>Sign Up</v-btn>
+            <v-btn small text to="/login" router exact>Login</v-btn>
+          </div>
+
+          <div v-if="currentUser">
+            <v-icon left>mdi-phone-classic</v-icon>
+            <span class="body-2">+94 (76) 797 1071</span>
+          </div>
+
+          <div>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on" @click="openProfile = true">
+                  <v-icon>mdi-account-settings</v-icon>
+                </v-btn>
+              </template>
+              <span>Profile</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on" to="/register">
+                  <v-icon @click.prevent="logOut">mdi-logout</v-icon>
+                </v-btn>
+              </template>
+              <span>Logout</span>
+            </v-tooltip>
+          </div>
+        </v-list-item>
+
+        <v-list-item class="hidden-xs-only">
+          <v-btn text v-for="(item, i) in items" :key="i" :to="item.to" router exact>{{item.title}}</v-btn>
+          <div v-if="showAdminBoard">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on" to="/admin/users">
+                  <v-icon>mdi-account-tie</v-icon>
+                </v-btn>
+              </template>
+              <span>Administrator</span>
+            </v-tooltip>
+          </div>
+        </v-list-item>
+      </v-list>
     </v-app-bar>
+
+    <v-row justify="center">
+      <v-dialog v-if="currentUser" v-model="openProfile" max-width="350px">
+        <v-card class="text-center py-7">
+          <v-card-text class="title">Hi, {{currentUser.username}}</v-card-text>
+          <v-card-text>{{currentUser.email}}</v-card-text>
+          <v-btn text @click="onDeleteUser(currentUser.id)" class="red--text">DELETE ACCOUNT</v-btn>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
     <v-content>
       <v-container>
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer dark padless>
-      <v-card flat tile class="blue darken-2 white--text text-center">
-        <v-card-text>
-          <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
-            <v-icon size="24px">{{ icon }}</v-icon>
-          </v-btn>
-        </v-card-text>
-
-        <v-card-text
-          class="white--text pt-0"
-        >Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} —
-          <strong>SSDGROUPC</strong>
-        </v-card-text>
-      </v-card>
+    <v-footer dark padless class="blue darken-2">
+      <v-row justify="center">
+        <v-card flat tile class="blue darken-2 white--text text-center">
+          <v-card-text>
+            <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
+              <v-icon size="24px">{{ icon }}</v-icon>
+            </v-btn>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-text class="white--text">
+            {{ new Date().getFullYear() }} —
+            <strong>SSDGROUPC</strong>
+          </v-card-text>
+        </v-card>
+      </v-row>
     </v-footer>
   </v-app>
 </template>
@@ -77,6 +137,7 @@
 export default {
   data() {
     return {
+      openProfile: false,
       clipped: false,
       drawer: false,
       items: [
@@ -103,10 +164,6 @@ export default {
         {
           title: "Contact Us",
           to: "/contactUs"
-        },
-        {
-          title: "Admin",
-          to: "/admin/users"
         }
       ],
       icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"],
@@ -114,6 +171,27 @@ export default {
       right: true,
       rightDrawer: false
     };
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    showAdminBoard() {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes("ROLE_ADMIN");
+      }
+      return false;
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/login");
+    },
+    onDeleteUser(id) {
+      this.$store.dispatch("users/deleteUser", id);
+      this.$router.push("/");
+    }
   }
 };
 </script>

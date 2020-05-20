@@ -8,20 +8,27 @@
     <v-divider class="my-5" v-if="rideouts.length > 0"></v-divider>
     <v-row>
       <v-col xs="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
-        <v-card outlined height="410px">
+        <v-card outlined height="440px">
           <v-img
             class="white--text align-end"
             height="200px"
             :src="rideout.rideoutLocationImageLink"
           ></v-img>
           <v-card-title>{{rideout.rideoutTitle}}</v-card-title>
+          <v-card-subtitle class="pb-0 subtitle-1">
+            From:
+            <span class="font-weight-bold primary--text">{{rideout.rideoutStartingPoint}}</span> To:
+            <span class="font-weight-bold primary--text">{{rideout.rideoutEndingPoint}}</span>
+          </v-card-subtitle>
+          <v-card-subtitle class="pb-0 subtitle-1">
+            Date:
+            <span class="font-weight-bold primary--text">{{rideout.rideoutDate.substr(0, 10)}}</span>
+          </v-card-subtitle>
           <v-card-subtitle
             class="pb-0"
             style="height:70px; overflow:hidden;"
           >{{rideout.rideoutDescription}}</v-card-subtitle>
-          <v-card-subtitle
-            class="pb-0"
-          >{{rideout.rideoutStartingPoint}} - {{rideout.rideoutEndingPoint}}</v-card-subtitle>
+
           <v-card-actions>
             <v-spacer></v-spacer>
 
@@ -72,7 +79,11 @@ export default {
   methods: {
     onClickBook(id) {
       this.rideout = this.$store.getters["rideouts/rideout"](parseInt(id));
-      this.bookDialog = true;
+      if (this.currentUser) {
+        this.bookDialog = true;
+      } else {
+        this.$router.push("/login");
+      }
     },
     onCreateReservation() {
       const reservation = {
@@ -94,6 +105,9 @@ export default {
   computed: {
     rideouts() {
       return this.$store.getters["rideouts/loadedRideouts"];
+    },
+    currentUser() {
+      return this.$store.state.auth.user;
     }
   },
   created() {

@@ -18,7 +18,6 @@ export default {
   actions: {
     async fetchInquiries({ commit }) {
       const response = await http.get("/inquiries");
-
       commit("INIT_INQUIRIES", response.data);
     },
     async createInquiry({ commit }, payload) {
@@ -31,7 +30,6 @@ export default {
       };
 
       const response = await http.post("/inquiries", inquiry);
-
       commit("ADD_INQUIRY", response.data);
     },
     async deleteInquiry({ commit }, inquiryId) {

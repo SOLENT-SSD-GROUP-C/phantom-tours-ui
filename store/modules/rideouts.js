@@ -31,7 +31,6 @@ export default {
   actions: {
     async fetchRideouts({ commit }) {
       const response = await http.get("/rideouts");
-
       commit("INIT_RIDEOUTS", response.data);
     },
 
@@ -44,7 +43,6 @@ export default {
         rideoutStartingPoint: payload.rideoutStartingPoint,
         rideoutEndingPoint: payload.rideoutEndingPoint
       };
-
       const response = await http.post("/rideouts", rideout);
       commit("ADD_RIDEOUT", response.data);
     },

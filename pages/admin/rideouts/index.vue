@@ -29,25 +29,30 @@
                     counter="250"
                   ></v-text-field>
 
-                  <!-- <v-menu
+                  <v-menu
+                    ref="menu"
                     v-model="menu"
                     :close-on-content-click="false"
-                    :nudge-right="40"
+                    :return-value.sync="editedRideoutDate"
                     transition="scale-transition"
                     offset-y
                     min-width="290px"
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="date"
-                        label="Event Date"
+                        v-model="rideoutDate"
+                        label="Rideout Date"
                         prepend-icon="mdi-calendar"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="rideoutDate" @input="menu = false"></v-date-picker>
-                  </v-menu>-->
+                    <v-date-picker v-model="rideoutDate" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                    </v-date-picker>
+                  </v-menu>
 
                   <v-text-field v-model="rideoutStartingPoint" label="Starting Point" required></v-text-field>
                   <v-text-field v-model="rideoutEndingPoint" label="Ending Point" required></v-text-field>
@@ -83,25 +88,30 @@
                     counter="250"
                   ></v-text-field>
 
-                  <!-- <v-menu
+                  <v-menu
+                    ref="menu"
                     v-model="menu"
                     :close-on-content-click="false"
-                    :nudge-right="40"
+                    :return-value.sync="editedRideoutDate"
                     transition="scale-transition"
                     offset-y
                     min-width="290px"
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="date"
-                        label="Event Date"
+                        v-model="editedRideoutDate"
+                        label="Picker in menu"
                         prepend-icon="mdi-calendar"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="editedRideoutDate" @input="menu = false"></v-date-picker>
-                  </v-menu>-->
+                    <v-date-picker v-model="editedRideoutDate" no-title scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                      <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                    </v-date-picker>
+                  </v-menu>
 
                   <v-text-field
                     v-model="editedRideoutStartingPoint"
@@ -136,7 +146,7 @@
               class="pb-0"
             >{{rideout.rideoutDescription}}</v-card-subtitle>
 
-            <!-- <v-card-subtitle class="pb-0">{{rideout.rideoutDate}}</v-card-subtitle> -->
+            <v-card-subtitle class="pb-0">{{rideout.rideoutDate.substr(0, 10)}}</v-card-subtitle>
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -154,16 +164,17 @@
 export default {
   layout: "admin",
   data: () => ({
+    // date: new Date().toISOString().substr(0, 10),
+    menu: false,
     overlay: false,
     addDialog: false,
     editDialog: false,
-    date: new Date().toISOString().substr(0, 10),
     menu: false,
 
     rideoutTitle: "",
     rideoutDescription: "",
     rideoutLocationImageLink: "",
-    // rideoutDate: "",
+    rideoutDate: "",
     rideoutStartingPoint: "",
     rideoutEndingPoint: "",
 
@@ -171,7 +182,7 @@ export default {
     editedRideoutTitle: "",
     editedRideoutDescription: "",
     editedRideoutLocationImageLink: "",
-    // editedRideoutDate: "",
+    editedRideoutDate: "",
     editedRideoutStartingPoint: "",
     editedRideoutEndingPoint: ""
   }),
@@ -179,10 +190,6 @@ export default {
   computed: {
     rideouts() {
       return this.$store.getters["rideouts/loadedRideouts"];
-    },
-
-    formIsValid() {
-      // return
     }
   },
   methods: {
@@ -196,21 +203,18 @@ export default {
       this.editedRideoutTitle = rideout.rideoutTitle;
       this.editedRideoutDescription = rideout.rideoutDescription;
       this.editedRideoutLocationImageLink = rideout.rideoutLocationImageLink;
-      // this.editedRideoutDate = rideout.rideoutDate;
+      this.editedRideoutDate = rideout.rideoutDate.substr(0, 10);
       this.editedRideoutStartingPoint = rideout.rideoutStartingPoint;
       this.editedRideoutEndingPoint = rideout.rideoutEndingPoint;
       this.editDialog = true;
     },
     onCreateRideout() {
-      // if (!this.formIsValid) {
-      //   return;
-      // }
       const rideoutData = {
         rideoutId: this.rideoutId,
         rideoutTitle: this.rideoutTitle,
         rideoutDescription: this.rideoutDescription,
         rideoutLocationImageLink: this.rideoutLocationImageLink,
-        // rideoutDate: this.rideoutDate,
+        rideoutDate: this.rideoutDate,
         rideoutStartingPoint: this.rideoutStartingPoint,
         rideoutEndingPoint: this.rideoutEndingPoint
       };
@@ -227,7 +231,7 @@ export default {
         rideoutTitle: this.editedRideoutTitle,
         rideoutDescription: this.editedRideoutDescription,
         rideoutLocationImageLink: this.editedRideoutLocationImageLink,
-        // rideoutDate: this.editedRideoutDate,
+        rideoutDate: this.editedRideoutDate,
         rideoutStartingPoint: this.editedRideoutStartingPoint,
         rideoutEndingPoint: this.editedRideoutEndingPoint
       };

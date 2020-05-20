@@ -11,13 +11,6 @@ export default {
       state.loadedTours.push(payload);
     },
     UPDATE_TOUR: (state, payload) => {
-      // const tour = state.loadedTours.find(tour => {
-      //   return tour.tourId === payload.tourId;
-      // });
-      // if (tour) {
-      //   tour = payload;
-      // }
-
       const index = state.loadedTours.findIndex(
         tour => tour.tourId === payload.tourId
       );
@@ -32,14 +25,8 @@ export default {
   },
   actions: {
     async fetchTours({ commit }) {
-      await http
-        .get("/tours")
-        .then(response => {
-          commit("INIT_TOURS", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.get("/tours");
+      commit("INIT_TOURS", response.data);
     },
     async createTour({ commit }, payload) {
       const tour = {
@@ -56,7 +43,6 @@ export default {
         tourAvailability: payload.tourAvailability,
         tourRouteMapLink: payload.tourRouteMapLink
       };
-
       const response = await http.post("/tours", tour);
       commit("ADD_TOUR", response.data);
     },
@@ -73,7 +59,6 @@ export default {
     loadedTours(state) {
       return state.loadedTours;
     },
-
     tour: state => id => state.loadedTours.find(t => t.tourId === id)
   }
 };

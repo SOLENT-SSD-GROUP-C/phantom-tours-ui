@@ -7,7 +7,7 @@ export default {
   },
   mutations: {
     INIT_BIKES: (state, bikes) => (state.loadedBikes = bikes),
-    ADD_BIKE: (state, payload)=> {
+    ADD_BIKE: (state, payload) => {
       state.loadedBikes.push(payload);
     },
     REMOVE_BIKE: (state, bikeId) =>
@@ -17,14 +17,8 @@ export default {
   },
   actions: {
     async fetchBikes({ commit }) {
-      await http
-        .get("/bikes")
-        .then(response => {
-          commit("INIT_BIKES", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.get("/bikes");
+      commit("INIT_BIKES", response.data);
     },
     async createBike({ commit }, payload) {
       const bike = {
@@ -33,14 +27,8 @@ export default {
         bikeImageLink: payload.bikeImageLink
       };
 
-      await http
-        .post("/bikes", bike)
-        .then(response => {
-          commit("ADD_BIKE", response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const response = await http.post("/bikes", bike);
+      commit("ADD_BIKE", response.data);
     },
     async deleteBike({ commit }, bikeId) {
       await http.delete(`/bikes/${bikeId}`);

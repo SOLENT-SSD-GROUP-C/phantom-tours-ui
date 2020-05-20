@@ -14,10 +14,10 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || "",
-      },
+        content: process.env.npm_package_description || ""
+      }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   /*
    ** Customize the progress-bar color
@@ -42,7 +42,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     "@nuxtjs/axios",
     // Doc: https://github.com/nuxt-community/dotenv-module
-    "@nuxtjs/dotenv",
+    "@nuxtjs/dotenv"
   ],
   /*
    ** Axios module configuration
@@ -65,10 +65,10 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
-      },
-    },
+          success: colors.green.accent3
+        }
+      }
+    }
   },
   /*
    ** Build configuration
@@ -77,6 +77,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {},
-  },
+    extend(config, ctx) {}
+  }
 };
