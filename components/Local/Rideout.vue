@@ -1,11 +1,11 @@
 <template>
-  <v-container>
-    <h2 class="display-1 my-2" v-if="rideouts.length > 0">Upcoming Rideouts</h2>
-    <p v-if="rideouts.length > 0">
+  <v-container v-if="rideouts && rideouts.length > 0">
+    <h2 class="display-1 my-2">Upcoming Rideouts</h2>
+    <p>
       Take a ride with us on some of the less-travelled roads in Southern Africa. You'll get to discover and experience some of the continent's breath-taking landscapes while challenging your skill and technique on different terrain. Our adventure tours cover a large area of Southern Africa, stretching from the Eastern Cape, to the border of Namibia.
       Whether you want to go on a shorter adventure tour that covers the outskirts of the mystical Garden Route, or a week-long excursion, our adventure tours cater for every type of rider and adventurer out there. All the adventure tours also offer a wide variety of terrain, making our offering as diverse as it is unique.
     </p>
-    <v-divider class="my-5" v-if="rideouts.length > 0"></v-divider>
+    <v-divider class="my-5"></v-divider>
     <v-row>
       <v-col xs="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
         <v-card outlined height="440px">
