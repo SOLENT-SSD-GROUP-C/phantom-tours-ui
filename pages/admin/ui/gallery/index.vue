@@ -8,7 +8,7 @@
       </v-row>
 
       <v-row justify="center">
-        <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-dialog v-model="dialog" max-width="600px">
           <v-card>
             <v-card-text>
               <v-container>
