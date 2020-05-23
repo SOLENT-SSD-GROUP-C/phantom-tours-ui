@@ -131,30 +131,32 @@
 
       <!-- DISPLAY TOURS -->
       <v-row>
-        <v-col xs="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
-          <v-card>
-            <v-img
-              class="white--text align-end"
-              height="200px"
-              :src="rideout.rideoutLocationImageLink"
-            >
-              <v-card-title>{{rideout.tourTitle}}</v-card-title>
-            </v-img>
+        <div v-if="rideouts.length > 0">
+          <v-col cols="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
+            <v-card>
+              <v-img
+                class="white--text align-end"
+                height="200px"
+                :src="rideout.rideoutLocationImageLink"
+              >
+                <v-card-title>{{rideout.tourTitle}}</v-card-title>
+              </v-img>
 
-            <v-card-subtitle
-              style="height:100px; overflow:hidden;"
-              class="pb-0"
-            >{{rideout.rideoutDescription}}</v-card-subtitle>
+              <v-card-subtitle
+                style="height:100px; overflow:hidden;"
+                class="pb-0"
+              >{{rideout.rideoutDescription}}</v-card-subtitle>
 
-            <v-card-subtitle class="pb-0">{{rideout.rideoutDate.substr(0, 10)}}</v-card-subtitle>
+              <v-card-subtitle class="pb-0">{{rideout.rideoutDate.substr(0, 10)}}</v-card-subtitle>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="handleEditRideoutButton(rideout)">Edit</v-btn>
-              <v-btn color="red" text @click="onDeleteRideout(rideout.rideoutId)">Delete</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="handleEditRideoutButton(rideout)">Edit</v-btn>
+                <v-btn color="red" text @click="onDeleteRideout(rideout.rideoutId)">Delete</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </div>
       </v-row>
     </v-container>
   </v-app>

@@ -12,47 +12,117 @@
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             class="profile-img-card"
           />
-          <v-form ref="form" @submit.prevent="handleRegister">
-            <!-- <div v-if="!successful"> -->
-            <div>
-              <v-text-field label="username" v-model="user.username"></v-text-field>
-              <!-- <div v-if="submitted && errors.has('username')" class="danger">
-                  {{ errors.first("username") }}
-              </div>-->
-            </div>
 
-            <div>
-              <v-text-field label="email" v-model="user.email"></v-text-field>
-              <!-- <div v-if="submitted && errors.has('email')" class="danger">
-                  {{ errors.first("email") }}
-              </div>-->
-            </div>
+          <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
+            <v-form ref="form" @submit.prevent="handleRegister">
+              <div v-if="!successful">
+                <div>
+                  <ValidationProvider
+                    rules="required|min:3|max:20"
+                    v-slot="{ errors }"
+                  >
+                    <v-text-field
+                      label="username"
+                      v-model="user.username"
+                    ></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                        >{{ errors[0] }}</v-alert
+                      >
+                    </span>
+                  </ValidationProvider>
+                </div>
 
-            <div>
-              <v-text-field label="password" v-model="user.password"></v-text-field>
-              <!-- <div v-if="submitted && errors.has('password')" class="danger">
-                  {{ errors.first("password") }}
-              </div>-->
-            </div>
-            <!-- </div> -->
-            <v-btn type="submit" block class="primary">Sign Up</v-btn>
-            <v-card-text>
-              Already have an account?
-              <span
-                style="cursor:pointer"
-                class="primary--text"
-                @click="$router.push('/login')"
-              >Sign in</span>
-            </v-card-text>
-          </v-form>
+                <div>
+                  <ValidationProvider
+                    rules="required|email|max:50"
+                    v-slot="{ errors }"
+                  >
+                    <v-text-field
+                      label="email"
+                      v-model="user.email"
+                    ></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                        >{{ errors[0] }}</v-alert
+                      >
+                    </span>
+                  </ValidationProvider>
+                </div>
 
-          <!-- <div
-            v-if="message"
-            class="alert"
-            :class="successful ? 'success' : 'danger'"
+                <div>
+                  <ValidationProvider
+                    rules="required|min:6|max:40"
+                    v-slot="{ errors }"
+                  >
+                    <v-text-field
+                      label="password"
+                      :type="showPassword ? 'text' : 'password'"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="showPassword = !showPassword"
+                      v-model="user.password"
+                    ></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                        >{{ errors[0] }}</v-alert
+                      >
+                    </span>
+                  </ValidationProvider>
+                </div>
+              </div>
+              <v-btn
+                :loading="loading"
+                :disabled="invalid"
+                type="submit"
+                block
+                class="primary"
+                >Sign up</v-btn
+              >
+              <v-card-text>
+                Already have an account?
+                <span
+                  style="cursor:pointer"
+                  class="primary--text"
+                  @click="$router.push('/login')"
+                  >Sign in</span
+                >
+              </v-card-text>
+            </v-form>
+          </ValidationObserver>
+
+          <v-alert
+            class="mt-2"
+            dismissible
+            :value="success"
+            dense
+            outlined
+            type="success"
+            >Resgitstered Successfully</v-alert
           >
-            {{ message }}
-          </div>-->
+          <v-alert
+            class="mt-2"
+            dismissible
+            :value="error"
+            dense
+            outlined
+            type="error"
+            >{{ message.message }}</v-alert
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -61,15 +131,18 @@
 
 <script>
 import User from "../models/user";
-import { ValidationProvider } from "vee-validate";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 
 export default {
   name: "Register",
-  components: { ValidationProvider },
+  components: { ValidationProvider, ValidationObserver },
   data() {
     return {
+      loading: false,
+      showPassword: false,
       user: new User("", "", ""),
-      submitted: false,
+      success: false,
+      error: false,
       successful: false,
       message: ""
     };
@@ -86,30 +159,29 @@ export default {
   },
   methods: {
     handleRegister() {
-      // this.message = "";
-      // this.submitted = true;
-      // this.$validator.validate().then(isValid => {
-      //   if (isValid) {
-      //     this.$store.dispatch("auth/register", this.user).then(
-      //       data => {
-      //         this.message = data.message;
-      //         this.successful = true;
-      //       },
-      //       error => {
-      //         this.message =
-      //           (error.response && error.response.data) ||
-      //           error.message ||
-      //           error.toString();
-      //         this.successful = false;
-      //       }
-      //     );
-      //   }
-      // });
+      this.loading = true;
 
-      this.$store.dispatch("auth/register", this.user).then(data => {
-        this.message = data.message;
-        this.successful = true;
-      });
+      this.$store.dispatch("auth/register", this.user).then(
+        data => {
+          this.loading = false;
+          this.message = data.message;
+          this.successful = true;
+          this.error = false;
+          this.success = true;
+          this.$refs.form.reset();
+          this.$refs.form.resetValidation();
+        },
+        error => {
+          this.loading = false;
+          this.message =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+          this.successful = false;
+          this.success = false;
+          this.error = true;
+        }
+      );
     }
   }
 };

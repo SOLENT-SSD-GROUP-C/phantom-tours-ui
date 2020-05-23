@@ -9,18 +9,18 @@
       <v-divider class="my-5"></v-divider>
 
       <v-row>
-        <v-col sm="12" v-for="bike in bikes" :key="bike.bikeId">
-          <v-card class="d-inline-block mx-auto" outlined>
+        <v-col cols="12" v-for="bike in bikes" :key="bike.bikeId">
+          <v-card class="d-inline-block mx-auto" outlined width="100%">
             <v-container>
               <v-row justify="space-between">
-                <v-col sm="12" md="4">
-                  <v-img height="200" width="400" :src="bike.bikeImageLink"></v-img>
+                <v-col cols="12" md="5" class="pl-5">
+                  <v-img height="200px" width="300px" :src="bike.bikeImageLink"></v-img>
                 </v-col>
 
-                <v-col sm="12" md="8" class="text-left pl-0">
+                <v-col cols="12" md="7" class="text-left pl-0">
                   <v-card-title>{{bike.bikeName}}</v-card-title>
                   <v-card-subtitle
-                    style="height:110px; overflow:hidden;"
+                    style="height:auto; overflow:hidden;"
                     class="pb-0"
                   >{{bike.bikeDescription}}</v-card-subtitle>
                 </v-col>

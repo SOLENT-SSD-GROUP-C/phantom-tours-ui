@@ -53,38 +53,44 @@
       <v-list class="transparent" dense flat dark>
         <v-list-item>
           <v-spacer></v-spacer>
+          <v-icon left>mdi-phone-classic</v-icon>
+          <span class="body-2">+94 (76) 797 1071</span>
           <div v-if="!currentUser" class="navbar-nav ml-auto">
             <v-btn small text to="/register" router exact>Sign Up</v-btn>
             <v-btn small text to="/login" router exact>Login</v-btn>
           </div>
 
           <div v-if="currentUser">
-            <v-icon left>mdi-phone-classic</v-icon>
-            <span class="body-2">+94 (76) 797 1071</span>
-          </div>
-
-          <div>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click="openProfile = true">
-                  <v-icon>mdi-account-settings</v-icon>
-                </v-btn>
-              </template>
-              <span>Profile</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" to="/register">
-                  <v-icon @click.prevent="logOut">mdi-logout</v-icon>
-                </v-btn>
-              </template>
-              <span>Logout</span>
-            </v-tooltip>
+            <div>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on" @click="openProfile = true">
+                    <v-icon>mdi-account-settings</v-icon>
+                  </v-btn>
+                </template>
+                <span>Profile</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on" to="/register">
+                    <v-icon @click.prevent="logOut">mdi-logout</v-icon>
+                  </v-btn>
+                </template>
+                <span>Logout</span>
+              </v-tooltip>
+            </div>
           </div>
         </v-list-item>
 
         <v-list-item class="hidden-xs-only">
-          <v-btn text v-for="(item, i) in items" :key="i" :to="item.to" router exact>{{item.title}}</v-btn>
+          <v-btn
+            text
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >{{ item.title }}</v-btn>
           <div v-if="showAdminBoard">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -102,9 +108,19 @@
     <v-row justify="center">
       <v-dialog v-if="currentUser" v-model="openProfile" max-width="350px">
         <v-card class="text-center py-7">
-          <v-card-text class="title">Hi, {{currentUser.username}}</v-card-text>
-          <v-card-text>{{currentUser.email}}</v-card-text>
-          <v-btn text @click="onDeleteUser(currentUser.id)" class="red--text">DELETE ACCOUNT</v-btn>
+          <v-card-text class="title">Hi, {{ currentUser.username }}</v-card-text>
+          <v-card-text>{{ currentUser.email }}</v-card-text>
+          <v-btn text @click="openConfirmation = true" class="red--text">DELETE ACCOUNT</v-btn>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="openConfirmation" max-width="250px">
+        <v-card class="text-center py-7">
+          <v-card-text class="title">Are you sure?</v-card-text>
+          <v-btn text @click="onDeleteUser(currentUser.id)" class="red--text">YES</v-btn>
+          <v-btn text @click="onSayNo" class="red--text">NO</v-btn>
         </v-card>
       </v-dialog>
     </v-row>
@@ -137,6 +153,7 @@
 export default {
   data() {
     return {
+      openConfirmation: false,
       openProfile: false,
       clipped: false,
       drawer: false,
@@ -190,7 +207,13 @@ export default {
     },
     onDeleteUser(id) {
       this.$store.dispatch("users/deleteUser", id);
-      this.$router.push("/");
+      openProfile = false;
+      this.openConfirmation = false;
+      this.logOut();
+    },
+    onSayNo() {
+      this.openConfirmation = false;
+      this.openProfile = false;
     }
   }
 };

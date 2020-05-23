@@ -99,25 +99,27 @@
 
       <!-- DISPLAY TOURS -->
       <v-row>
-        <v-col xs="12" md="6" v-for="tour in tours" :key="tour.tourId">
-          <v-card>
-            <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
-              <v-card-title>{{tour.tourTitle}}</v-card-title>
-            </v-img>
+        <div v-if="tours.length > 0">
+          <v-col cols="12" sm="6" v-for="tour in tours" :key="tour.tourId">
+            <v-card>
+              <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
+                <v-card-title>{{tour.tourTitle}}</v-card-title>
+              </v-img>
 
-            <v-card-subtitle
-              style="height:100px; overflow:hidden;"
-              class="pb-0"
-            >{{tour.tourDescription}}</v-card-subtitle>
+              <v-card-subtitle
+                style="height:100px; overflow:hidden;"
+                class="pb-0"
+              >{{tour.tourDescription}}</v-card-subtitle>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <!-- <v-btn color="primary" text @click="editDialog = true">Edit</v-btn> -->
-              <v-btn color="primary" text @click="handleEditTourButton(tour)">Edit</v-btn>
-              <v-btn color="red" text @click="onDeleteTour(tour.tourId)">Delete</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <!-- <v-btn color="primary" text @click="editDialog = true">Edit</v-btn> -->
+                <v-btn color="primary" text @click="handleEditTourButton(tour)">Edit</v-btn>
+                <v-btn color="red" text @click="onDeleteTour(tour.tourId)">Delete</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </div>
       </v-row>
     </v-container>
   </v-app>

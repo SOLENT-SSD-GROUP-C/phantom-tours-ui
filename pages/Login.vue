@@ -12,29 +12,66 @@
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             class="profile-img-card"
           />
-          <v-form ref="form" @submit.prevent="handleLogin">
-            <!-- <div v-if="!successful"> -->
-            <v-text-field
-              label="username"
-              v-model="user.username"
-            ></v-text-field>
+          <!-- Form -->
+          <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
+            <v-form ref="form" @submit.prevent="handleLogin">
+              <ValidationProvider rules="required" v-slot="{ errors }">
+                <v-text-field label="username" v-model="user.username"></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                  >{{ errors[0] }}</v-alert>
+                </span>
+              </ValidationProvider>
 
-            <v-text-field
-              label="password"
-              v-model="user.password"
-            ></v-text-field>
-            <!-- </div> -->
-            <v-btn type="submit" block class="primary">Login</v-btn>
-            <v-card-text
-              >Don't have and account?
-              <span
-                style="cursor:pointer"
-                class="primary--text"
-                @click="$router.push('/register')"
-                >Register</span
-              ></v-card-text
-            >
-          </v-form>
+              <ValidationProvider rules="required" v-slot="{ errors }">
+                <v-text-field
+                  label="password"
+                  v-model="user.password"
+                  :type="showPassword ? 'text' : 'password'"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
+                ></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                  >{{ errors[0] }}</v-alert>
+                </span>
+                <v-btn
+                  :loading="loading"
+                  :disabled="invalid"
+                  type="submit"
+                  block
+                  class="primary"
+                >Login</v-btn>
+              </ValidationProvider>
+
+              <v-alert
+                class="mt-2"
+                dismissible
+                :value="submitted"
+                dense
+                outlined
+                type="error"
+              >{{ message.message }}</v-alert>
+              <v-card-text>
+                Don't have and account?
+                <span
+                  style="cursor:pointer"
+                  class="primary--text"
+                  @click="$router.push('/register')"
+                >Register</span>
+              </v-card-text>
+            </v-form>
+          </ValidationObserver>
         </v-card>
       </v-col>
     </v-row>
@@ -44,10 +81,20 @@
 <script>
 import User from "@/models/user";
 
+import { ValidationObserver, ValidationProvider } from "vee-validate";
+
 export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   name: "Login",
   data() {
     return {
+      showPassword: false,
+      submitted: false,
+      loading: false,
+      message: "",
       user: new User("", "")
     };
   },
@@ -63,6 +110,7 @@ export default {
   },
   methods: {
     handleLogin() {
+      this.loading = true;
       if (this.user.username && this.user.password) {
         this.$store.dispatch("auth/login", this.user).then(
           () => {
@@ -74,6 +122,7 @@ export default {
               (error.response && error.response.data) ||
               error.message ||
               error.toString();
+            this.submitted = true;
           }
         );
       }

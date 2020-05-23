@@ -12,21 +12,38 @@
           <v-card>
             <v-card-text>
               <v-container>
-                <v-form ref="form" @submit.prevent="onCreateGalleryItem">
-                  <v-row>
-                    <v-col cols="12" sm="12">
-                      <v-text-field v-model="galleryImageLink" label="Image Link" required></v-text-field>
-                    </v-col>
-                    <v-img
-                      :src="galleryImageLink"
-                      height="150"
-                      width="300"
-                      alt="Image Preview"
-                      v-show="galleryImageLink"
-                    ></v-img>
-                  </v-row>
-                  <v-btn class="primary mt-3" :disabled="!formIsValid" type="submit">Create</v-btn>
-                </v-form>
+                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
+                  <v-form ref="form" @submit.prevent="onCreateGalleryItem">
+                    <v-row>
+                      <v-col cols="12" sm="12">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          name="Name"
+                          rules="required|max:250"
+                        >
+                          <v-text-field v-model="galleryImageLink" label="Image Link" required></v-text-field>
+                          <span>
+                            <v-alert
+                              dismissible
+                              :value="errors.length > 0"
+                              dense
+                              outlined
+                              type="warning"
+                            >{{ errors[0] }}</v-alert>
+                          </span>
+                        </ValidationProvider>
+                      </v-col>
+                      <v-img
+                        :src="galleryImageLink"
+                        height="150"
+                        width="300"
+                        alt="Image Preview"
+                        v-show="galleryImageLink"
+                      ></v-img>
+                    </v-row>
+                    <v-btn class="primary mt-3" :disabled="!formIsValid" type="submit">Create</v-btn>
+                  </v-form>
+                </ValidationObserver>
               </v-container>
             </v-card-text>
           </v-card>
@@ -35,7 +52,7 @@
 
       <v-row>
         <v-col
-          cols="auto"
+          cols="12"
           sm="6"
           md="4"
           lg="3"
@@ -45,7 +62,7 @@
           <v-hover>
             <template v-slot:default="{ hover }">
               <v-card class="mx-auto" max-width="344">
-                <v-img :src="galleryItem.galleryImageLink"></v-img>
+                <v-img aspect-ratio="1" :src="galleryItem.galleryImageLink"></v-img>
                 <v-fade-transition>
                   <v-overlay v-if="hover" absolute color="#036358">
                     <v-btn @click="deleteGalleryItem(galleryItem.galleryItemId)">Delete</v-btn>
@@ -61,7 +78,12 @@
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   layout: "admin",
   data: () => ({
     overlay: false,

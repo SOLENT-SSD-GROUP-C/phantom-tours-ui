@@ -45,15 +45,25 @@
           <v-card-title>Book this Rideout</v-card-title>
           <v-card-text>
             <v-container>
-              <v-form ref="form" @submit.prevent="onCreateReservation">
-                <v-text-field v-model="rideout.rideoutTitle" disabled label="Reservation" required></v-text-field>
-                <v-text-field v-model="userFullName" label="Full Name" required></v-text-field>
-                <v-text-field v-model="userEmail" label="Email" required></v-text-field>
-                <v-text-field v-model="userPhone" label="Phone" required></v-text-field>
+              <ValidationObserver name="obs2" ref="obs2" v-slot="{ validate, reset }">
+                <v-form ref="form" @submit.prevent="onCreateReservation">
+                  <ValidationProvider v-slot="{ errors }" rules="required|max:10">
+                    <v-text-field
+                      v-model="rideout.rideoutTitle"
+                      disabled
+                      label="Reservation"
+                      required
+                    ></v-text-field>
+                  </ValidationProvider>
 
-                <v-btn class="primary mt-3" type="submit">Submit</v-btn>
-                <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
-              </v-form>
+                  <v-text-field v-model="userFullName" label="Full Name" required></v-text-field>
+                  <v-text-field v-model="userEmail" label="Email" required></v-text-field>
+                  <v-text-field v-model="userPhone" label="Phone" required></v-text-field>
+
+                  <v-btn class="primary mt-3" type="submit">Submit</v-btn>
+                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                </v-form>
+              </ValidationObserver>
             </v-container>
           </v-card-text>
         </v-card>
@@ -63,9 +73,14 @@
 </template>
 
 <script>
-import TourComponent from "@/components/Local/Tour";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
+  name: "RideoutComponent",
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   layout: "deafult",
   data: () => ({
     id: 0,

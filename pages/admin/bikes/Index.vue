@@ -7,19 +7,29 @@
         <v-btn text class="primary" @click="createDialog=true">Add Bike</v-btn>
       </v-row>
 
-      <v-row>
-        <v-card class="mx-auto my-3" outlined v-for="bike in bikes" :key="bike.bikeId">
+      <v-row v-if="bikes.length > 0">
+        <v-card
+          class="mx-auto my-3"
+          outlined
+          v-for="bike in bikes"
+          :key="bike.bikeId"
+          width="700px"
+        >
           <v-row wrap>
-            <v-col sm="12" md="5" class="pl-5">
+            <v-col cols="12" md="5" class="pl-5">
               <v-list-item-avatar tile image height="200" width="300" color="grey">
                 <v-img :src="bike.bikeImageLink"></v-img>
               </v-list-item-avatar>
             </v-col>
-            <v-col sm="12" md="7">
+
+            <v-col cols="12" md="7">
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-4">{{bike.bikeName}}</v-list-item-title>
-                  <v-card-text class="grey--text">{{bike.bikeDescription}}</v-card-text>
+                  <v-card-text
+                    style="height:100px; overflow:hidden;"
+                    class="grey--text"
+                  >{{bike.bikeDescription}}</v-card-text>
                 </v-list-item-content>
               </v-list-item>
               <v-card-actions>
@@ -38,18 +48,56 @@
             <v-card-title>Add Bike</v-card-title>
             <v-card-text>
               <v-container>
-                <v-form ref="form" @submit.prevent="onCreateBike">
-                  <v-text-field v-model="bikeName" label="Title" required></v-text-field>
-                  <v-textarea v-model="bikeDescription" label="Description" counter="1000"></v-textarea>
-                  <v-text-field
-                    v-model="bikeImageLink"
-                    label="Bike Image Link"
-                    required
-                    counter="250"
-                  ></v-text-field>
-                  <v-btn class="primary mt-3" type="submit">Save</v-btn>
-                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
-                </v-form>
+                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
+                  <v-form ref="form" @submit.prevent="onCreateBike">
+                    <ValidationProvider v-slot="{ errors }" name="Name" rules="required">
+                      <v-text-field v-model="bikeName" label="Title"></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" name="Name" rules="required|max:1000">
+                      <v-textarea v-model="bikeDescription" label="Description" counter="1000"></v-textarea>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" name="Name" rules="required|max:250">
+                      <v-text-field v-model="bikeImageLink" label="Bike Image Link" counter="250"></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <v-btn
+                      :loading="loading"
+                      :disabled="invalid"
+                      class="primary mt-3"
+                      type="submit"
+                    >Save</v-btn>
+                    <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                  </v-form>
+                </ValidationObserver>
               </v-container>
             </v-card-text>
           </v-card>
@@ -60,10 +108,17 @@
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from "vee-validate";
+
 export default {
   layout: "admin",
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   data() {
     return {
+      loading: false,
       createDialog: false,
       bikeName: "",
       bikeDescription: "",
@@ -86,9 +141,10 @@ export default {
         bikeDescription: this.bikeDescription,
         bikeImageLink: this.bikeImageLink
       };
-      this.$store.dispatch("bikes/createBike", bikeData);
-      this.$router.push("/admin/bikes");
-      this.cancelForm();
+      this.$store.dispatch("bikes/createBike", bikeData).then(data => {
+        this.$router.push("/admin/bikes");
+        this.cancelForm();
+      });
     },
     deleteBike(id) {
       this.$store.dispatch("bikes/deleteBike", id);

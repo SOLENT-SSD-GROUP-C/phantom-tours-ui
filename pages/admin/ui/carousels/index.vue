@@ -12,21 +12,38 @@
           <v-card>
             <v-card-text>
               <v-container>
-                <v-form ref="form" @submit.prevent="onCreateCarousel">
-                  <v-row>
-                    <v-col cols="12" sm="12">
-                      <v-text-field v-model="carouselImageLink" label="Image Link" required></v-text-field>
-                    </v-col>
-                    <v-img
-                      :src="carouselImageLink"
-                      height="150"
-                      width="300"
-                      alt="Image Preview"
-                      v-show="carouselImageLink"
-                    ></v-img>
-                  </v-row>
-                  <v-btn class="primary mt-3" :disabled="!formIsValid" type="submit">Create</v-btn>
-                </v-form>
+                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
+                  <v-form ref="form" @submit.prevent="onCreateCarousel">
+                    <v-row>
+                      <v-col cols="12" sm="12">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          name="Name"
+                          rules="required|max:250"
+                        >
+                          <v-text-field v-model="carouselImageLink" label="Image Link" required></v-text-field>
+                          <span>
+                            <v-alert
+                              dismissible
+                              :value="errors.length > 0"
+                              dense
+                              outlined
+                              type="warning"
+                            >{{ errors[0] }}</v-alert>
+                          </span>
+                        </ValidationProvider>
+                      </v-col>
+                      <v-img
+                        :src="carouselImageLink"
+                        height="150"
+                        width="300"
+                        alt="Image Preview"
+                        v-show="carouselImageLink"
+                      ></v-img>
+                    </v-row>
+                    <v-btn class="primary mt-3" :disabled="!formIsValid" type="submit">Create</v-btn>
+                  </v-form>
+                </ValidationObserver>
               </v-container>
             </v-card-text>
           </v-card>
@@ -54,7 +71,13 @@
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from "vee-validate";
+
 export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   layout: "admin",
   data: () => ({
     overlay: false,

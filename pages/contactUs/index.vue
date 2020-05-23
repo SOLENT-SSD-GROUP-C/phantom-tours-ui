@@ -2,20 +2,130 @@
   <v-app>
     <v-container>
       <h2 class="display-1 my-2">Contact Us</h2>
-      <p>If you have a question or comment, or would like to book a custom tour or a training day, please call us or complete our contact form, below.</p>
+      <p>
+        If you have a question or comment, or would like to book a custom tour
+        or a training day, please call us or complete our contact form, below.
+      </p>
       <v-divider class="my-5"></v-divider>
 
       <!-- CONTACT FORM -->
       <v-row>
         <v-col sm="12" md="6">
-          <v-form ref="form" @submit.prevent="onFormSubmit">
-            <v-text-field v-model="userFullName" label="Full Name" required></v-text-field>
-            <v-text-field v-model="userEmail" label="Email" required></v-text-field>
-            <v-text-field v-model="userPhone" label="Phone" required></v-text-field>
-            <v-text-field v-model="inquiryTitle" label="Subject" required></v-text-field>
-            <v-textarea v-model="inquiryBody" label="Message" required></v-textarea>
-            <v-btn text block class="primary" type="submit">Submit</v-btn>
-          </v-form>
+          <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
+            <v-form ref="form" @submit.prevent="onFormSubmit">
+              <ValidationProvider
+                rules="required|alpha_spaces"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="userFullName"
+                  label="Full Name"
+                ></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                    >{{ errors[0] }}</v-alert
+                  >
+                </span>
+              </ValidationProvider>
+
+              <ValidationProvider rules="required|email" v-slot="{ errors }">
+                <v-text-field v-model="userEmail" label="Email"></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                    >{{ errors[0] }}</v-alert
+                  >
+                </span>
+              </ValidationProvider>
+
+              <ValidationProvider
+                rules="required|digits:10"
+                v-slot="{ errors }"
+              >
+                <v-text-field
+                  v-model="userPhone"
+                  label="Phone"
+                  required
+                ></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                    >{{ errors[0] }}</v-alert
+                  >
+                </span>
+              </ValidationProvider>
+
+              <ValidationProvider rules="required|max:250" v-slot="{ errors }">
+                <v-text-field
+                  v-model="inquiryTitle"
+                  label="Subject"
+                  counter="250"
+                  required
+                ></v-text-field>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                    >{{ errors[0] }}</v-alert
+                  >
+                </span>
+              </ValidationProvider>
+
+              <ValidationProvider rules="required|max:1000" v-slot="{ errors }">
+                <v-textarea
+                  counter="1000"
+                  v-model="inquiryBody"
+                  label="Message"
+                  required
+                ></v-textarea>
+                <span>
+                  <v-alert
+                    dismissible
+                    :value="errors.length > 0"
+                    dense
+                    outlined
+                    type="warning"
+                    >{{ errors[0] }}</v-alert
+                  >
+                </span>
+              </ValidationProvider>
+
+              <v-btn
+                :disabled="invalid"
+                :loading="loading"
+                text
+                block
+                class="primary"
+                type="submit"
+                >Submit</v-btn
+              >
+              <v-alert
+                class="mt-2"
+                dismissible
+                :value="message.length > 0"
+                dense
+                outlined
+                type="success"
+                >{{ message }}</v-alert
+              >
+            </v-form>
+          </ValidationObserver>
         </v-col>
 
         <!-- ADDRESS SECTION -->
@@ -40,10 +150,7 @@
             <v-card-text class="text--primary headline">
               Physical address
               <div class="subtitle-2">
-                Phantom Tours (Pty) LTD,
-                Phantom Avanue,
-                Colombo 06,
-                Sri Lanka
+                Phantom Tours (Pty) LTD, Phantom Avanue, Colombo 06, Sri Lanka
               </div>
             </v-card-text>
           </v-card>
@@ -58,10 +165,12 @@
       <v-expansion-panels>
         <v-expansion-panel v-for="faq in faqs" :key="faq.question">
           <v-expansion-panel-header>
-            <h2 class="headline mb-2 red--text text--accent-3">{{faq.question}}</h2>
+            <h2 class="headline mb-2 red--text text--accent-3">
+              {{ faq.question }}
+            </h2>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <p class="subtitle-2 pl-5">{{faq.answer}}</p>
+            <p class="subtitle-2 pl-5">{{ faq.answer }}</p>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -70,9 +179,18 @@
 </template>
 
 <script>
+import { ValidationProvider } from "vee-validate";
+import { ValidationObserver } from "vee-validate";
+
 export default {
   layout: "deafult",
+  components: {
+    ValidationProvider,
+    ValidationObserver
+  },
   data: () => ({
+    loading: false,
+    message: "",
     userFullName: "",
     userEmail: "",
     userPhone: "",
@@ -99,6 +217,8 @@ export default {
   }),
   methods: {
     onFormSubmit() {
+      this.loading = true;
+
       const inquiry = {
         inquiryTitle: this.inquiryTitle,
         userFullName: this.userFullName,
@@ -107,8 +227,21 @@ export default {
         inquiryBody: this.inquiryBody
       };
 
-      this.$store.dispatch("inquiries/createInquiry", inquiry);
-      this.$refs.form.reset();
+      this.$store.dispatch("inquiries/createInquiry", inquiry).then(
+        () => {
+          this.loading = false;
+          this.$refs.form.reset();
+          this.$refs.form.resetValidation();
+          this.message = "Success";
+        },
+        error => {
+          this.loading = false;
+          this.message =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
     }
   }
 };
