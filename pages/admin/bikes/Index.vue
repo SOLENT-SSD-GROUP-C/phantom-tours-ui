@@ -7,7 +7,8 @@
         <v-btn text class="primary" @click="createDialog=true">Add Bike</v-btn>
       </v-row>
 
-      <v-row v-if="bikes.length > 0">
+      <!-- DISPLAY BIKES -->
+      <v-row>
         <v-card
           class="mx-auto my-3"
           outlined
