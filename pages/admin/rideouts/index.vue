@@ -14,52 +14,127 @@
             <v-card-title>Create a Rideout</v-card-title>
             <v-card-text>
               <v-container>
-                <v-form ref="form" @submit.prevent="onCreateRideout">
-                  <v-text-field v-model="rideoutTitle" label="Title" required></v-text-field>
-                  <v-textarea
-                    v-model="rideoutDescription"
-                    name="rideoutDescription"
-                    label="Description"
-                    counter="2500"
-                  ></v-textarea>
-                  <v-text-field
-                    v-model="rideoutLocationImageLink"
-                    label="Location Image Link"
-                    required
-                    counter="250"
-                  ></v-text-field>
+                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
+                  <v-form ref="form" @submit.prevent="onCreateRideout">
+                    <ValidationProvider v-slot="{ errors }" rules="required">
+                      <v-text-field v-model="rideoutTitle" label="Title"></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
 
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="editedRideoutDate"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
+                    <ValidationProvider v-slot="{ errors }" rules="required|max:2500">
+                      <v-textarea
+                        v-model="rideoutDescription"
+                        name="rideoutDescription"
+                        label="Description"
+                        counter="2500"
+                      ></v-textarea>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" rules="required|max:250">
                       <v-text-field
-                        v-model="rideoutDate"
-                        label="Rideout Date"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-on="on"
+                        v-model="rideoutLocationImageLink"
+                        label="Location Image Link"
+                        counter="250"
                       ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="rideoutDate" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
 
-                  <v-text-field v-model="rideoutStartingPoint" label="Starting Point" required></v-text-field>
-                  <v-text-field v-model="rideoutEndingPoint" label="Ending Point" required></v-text-field>
+                    <v-menu
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedRideoutDate"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <ValidationProvider v-slot="{ errors }" rules="required">
+                          <v-text-field
+                            v-model="rideoutDate"
+                            label="Rideout Date"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                          <span>
+                            <v-alert
+                              dismissible
+                              :value="errors.length > 0"
+                              dense
+                              outlined
+                              type="warning"
+                            >{{ errors[0] }}</v-alert>
+                          </span>
+                        </ValidationProvider>
+                      </template>
+                      <v-date-picker v-model="rideoutDate" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
 
-                  <v-btn class="primary mt-3" type="submit">Create</v-btn>
-                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
-                </v-form>
+                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                      <v-text-field v-model="rideoutStartingPoint" label="Starting Point" required></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                      <v-text-field v-model="rideoutEndingPoint" label="Ending Point" required></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <v-btn
+                      :loading="loading"
+                      :disabled="invalid"
+                      class="primary mt-3"
+                      type="submit"
+                    >Create</v-btn>
+                    <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                  </v-form>
+                </ValidationObserver>
               </v-container>
             </v-card-text>
           </v-card>
@@ -73,56 +148,136 @@
             <v-card-title>Edit Rideout</v-card-title>
             <v-card-text>
               <v-container>
-                <v-form ref="form" @submit.prevent="onUpdateRideout(editedRideoutId)">
-                  <v-text-field v-model="editedRideoutTitle" label="Title" required></v-text-field>
-                  <v-textarea
-                    v-model="editedRideoutDescription"
-                    name="editedRideoutDescription"
-                    label="Description"
-                    counter="2500"
-                  ></v-textarea>
-                  <v-text-field
-                    v-model="editedRideoutLocationImageLink"
-                    label="Location Image Link"
-                    required
-                    counter="250"
-                  ></v-text-field>
+                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
+                  <v-form ref="form" @submit.prevent="onUpdateRideout(editedRideoutId)">
+                    <ValidationProvider v-slot="{ errors }" rules="required">
+                      <v-text-field v-model="editedRideoutTitle" label="Title" required></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
 
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="editedRideoutDate"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
+                    <ValidationProvider v-slot="{ errors }" rules="required|max:2500">
+                      <v-textarea
+                        v-model="editedRideoutDescription"
+                        name="editedRideoutDescription"
+                        label="Description"
+                        counter="2500"
+                      ></v-textarea>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" rules="required|max:250">
                       <v-text-field
-                        v-model="editedRideoutDate"
-                        label="Picker in menu"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-on="on"
+                        v-model="editedRideoutLocationImageLink"
+                        label="Location Image Link"
+                        required
+                        counter="250"
                       ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="editedRideoutDate" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
 
-                  <v-text-field
-                    v-model="editedRideoutStartingPoint"
-                    label="Starting Point"
-                    required
-                  ></v-text-field>
-                  <v-text-field v-model="editedRideoutEndingPoint" label="Ending Point" required></v-text-field>
+                    <v-menu
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedRideoutDate"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <ValidationProvider v-slot="{ errors }" rules="required">
+                          <v-text-field
+                            v-model="editedRideoutDate"
+                            label="Picker in menu"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                          <span>
+                            <v-alert
+                              dismissible
+                              :value="errors.length > 0"
+                              dense
+                              outlined
+                              type="warning"
+                            >{{ errors[0] }}</v-alert>
+                          </span>
+                        </ValidationProvider>
+                      </template>
+                      <v-date-picker v-model="editedRideoutDate" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
 
-                  <v-btn class="primary mt-3" type="submit">Save</v-btn>
-                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
-                </v-form>
+                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                      <v-text-field
+                        v-model="editedRideoutStartingPoint"
+                        label="Starting Point"
+                        required
+                      ></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                      <v-text-field
+                        v-model="editedRideoutEndingPoint"
+                        label="Ending Point"
+                        required
+                      ></v-text-field>
+                      <span>
+                        <v-alert
+                          dismissible
+                          :value="errors.length > 0"
+                          dense
+                          outlined
+                          type="warning"
+                        >{{ errors[0] }}</v-alert>
+                      </span>
+                    </ValidationProvider>
+
+                    <v-btn
+                      :loading="loading"
+                      :disabled="invalid"
+                      class="primary mt-3"
+                      type="submit"
+                    >Save</v-btn>
+                    <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                  </v-form>
+                </ValidationObserver>
               </v-container>
             </v-card-text>
           </v-card>
@@ -163,10 +318,16 @@
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
   layout: "admin",
   data: () => ({
     // date: new Date().toISOString().substr(0, 10),
+    loading: false,
     menu: false,
     overlay: false,
     addDialog: false,
@@ -211,6 +372,7 @@ export default {
       this.editDialog = true;
     },
     onCreateRideout() {
+      this.loading = true;
       const rideoutData = {
         rideoutId: this.rideoutId,
         rideoutTitle: this.rideoutTitle,
@@ -221,13 +383,14 @@ export default {
         rideoutEndingPoint: this.rideoutEndingPoint
       };
 
-      this.$store.dispatch("rideouts/createRideout", rideoutData);
-      this.$refs.form.reset();
-      this.dialog = false;
-
-      this.$router.push("/admin/rideouts");
+      this.$store.dispatch("rideouts/createRideout", rideoutData).then(data => {
+        this.loading = false;
+        this.$refs.form.reset();
+        this.addDialog = false;
+      });
     },
     onUpdateRideout(rideoutId) {
+      this.loading = true;
       const payload = {
         rideoutId: this.editedRideoutId,
         rideoutTitle: this.editedRideoutTitle,
@@ -239,10 +402,11 @@ export default {
       };
 
       const data = { rideoutId, payload };
-      this.$store.dispatch("rideouts/updateRideout", data);
-      this.$refs.form.reset();
-      this.editDialog = false;
-      this.$router.push("/admin/rideouts");
+      this.$store.dispatch("rideouts/updateRideout", data).then(data => {
+        this.$refs.form.reset();
+        this.editDialog = false;
+        this.loading = false;
+      });
     },
     onDeleteRideout(id) {
       this.$store.dispatch("rideouts/deleteRideout", id);
