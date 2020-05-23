@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <h1>Admin Page</h1>
-    <p>Renders admin dashboard</p>
-  </div>
+  <h1>Accessed</h1>
 </template>
 
 <script>
 export default {
-  layout: "admin"
+  middleware: "adminAuthenticated",
+  name: "Admin",
+  data() {
+    return {};
+  }
 };
 </script>

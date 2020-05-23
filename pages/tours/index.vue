@@ -1,8 +1,9 @@
 <template>
   <v-app>
     <v-container>
-      <h1 class="display-1 my-3 font-weight-thin">Our Tours</h1>
-      <span>
+      <!-- TOURS SECTION -->
+      <h2 class="display-1 my-2">Our Tours</h2>
+      <p>
         Take a ride with us on some of the less-travelled roads in Southern
         Africa. You'll get to discover and experience some of the continent's
         breath-taking landscapes while challenging your skill and technique on
@@ -13,26 +14,28 @@
         adventure tours cater for every type of rider and adventurer out there.
         All the adventure tours also offer a wide variety of terrain, making our
         offering as diverse as it is unique.
-      </span>
+      </p>
+      <v-divider class="my-5"></v-divider>
 
-      <v-divider class="my-4"></v-divider>
+      <!-- TOUR COMPONENT -->
+      <app-tour></app-tour>
+      <v-divider class="my-5"></v-divider>
 
-      <v-row>
-        <app-tour-item class="mb-4"></app-tour-item>
-        <app-tour-item class="mb-4"></app-tour-item>
-        <app-tour-item class="mb-4"></app-tour-item>
-        <app-tour-item class="mb-4"></app-tour-item>
-      </v-row>
+      <!-- RIDEOUT COMPONENT -->
+      <app-rideout></app-rideout>
     </v-container>
   </v-app>
 </template>
 
 <script>
-import TourItem from "@/components/tours/TourItem.vue";
+import TourComponent from "@/components/Local/Tour";
+import RideoutComponent from "@/components/Local/Rideout";
 
 export default {
+  layout: "deafult",
   components: {
-    appTourItem: TourItem
+    appTour: TourComponent,
+    appRideout: RideoutComponent
   }
 };
 </script>
