@@ -6,7 +6,7 @@ import {
   digits,
   max,
   min,
-  numaric,
+  is,
   between
 } from "vee-validate/dist/rules";
 
@@ -15,6 +15,11 @@ setInteractionMode("eager");
 extend("required", {
   ...required,
   message: "This field is required"
+});
+
+extend("is", {
+  ...is,
+  message: "Secret key doesn't match"
 });
 
 // extend("numaric", {

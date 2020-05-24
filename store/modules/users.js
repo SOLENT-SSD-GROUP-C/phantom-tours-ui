@@ -20,9 +20,7 @@ export default {
       }
     },
     REMOVE_USER: (state, userId) =>
-      (state.loadedUsers = state.loadedUsers.filter(
-        user => user.userId !== userId
-      ))
+      (state.loadedUsers = state.loadedUsers.filter(user => user.id !== userId))
   },
 
   actions: {
