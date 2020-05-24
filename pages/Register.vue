@@ -17,14 +17,8 @@
             <v-form ref="form" @submit.prevent="handleRegister">
               <div v-if="!successful">
                 <div>
-                  <ValidationProvider
-                    rules="required|min:3|max:20"
-                    v-slot="{ errors }"
-                  >
-                    <v-text-field
-                      label="username"
-                      v-model="user.username"
-                    ></v-text-field>
+                  <ValidationProvider rules="required|min:3|max:20" v-slot="{ errors }">
+                    <v-text-field label="username" v-model="user.username"></v-text-field>
                     <span>
                       <v-alert
                         dismissible
@@ -32,21 +26,14 @@
                         dense
                         outlined
                         type="warning"
-                        >{{ errors[0] }}</v-alert
-                      >
+                      >{{ errors[0] }}</v-alert>
                     </span>
                   </ValidationProvider>
                 </div>
 
                 <div>
-                  <ValidationProvider
-                    rules="required|email|max:50"
-                    v-slot="{ errors }"
-                  >
-                    <v-text-field
-                      label="email"
-                      v-model="user.email"
-                    ></v-text-field>
+                  <ValidationProvider rules="required|email|max:50" v-slot="{ errors }">
+                    <v-text-field label="email" v-model="user.email"></v-text-field>
                     <span>
                       <v-alert
                         dismissible
@@ -54,17 +41,13 @@
                         dense
                         outlined
                         type="warning"
-                        >{{ errors[0] }}</v-alert
-                      >
+                      >{{ errors[0] }}</v-alert>
                     </span>
                   </ValidationProvider>
                 </div>
 
                 <div>
-                  <ValidationProvider
-                    rules="required|min:6|max:40"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider rules="required|min:6|max:40" v-slot="{ errors }">
                     <v-text-field
                       label="password"
                       :type="showPassword ? 'text' : 'password'"
@@ -79,8 +62,7 @@
                         dense
                         outlined
                         type="warning"
-                        >{{ errors[0] }}</v-alert
-                      >
+                      >{{ errors[0] }}</v-alert>
                     </span>
                   </ValidationProvider>
                 </div>
@@ -91,16 +73,14 @@
                 type="submit"
                 block
                 class="primary"
-                >Sign up</v-btn
-              >
+              >Sign up</v-btn>
               <v-card-text>
                 Already have an account?
                 <span
                   style="cursor:pointer"
                   class="primary--text"
                   @click="$router.push('/login')"
-                  >Sign in</span
-                >
+                >Sign in</span>
               </v-card-text>
             </v-form>
           </ValidationObserver>
@@ -112,8 +92,7 @@
             dense
             outlined
             type="success"
-            >Resgitstered Successfully</v-alert
-          >
+          >Resgitstered Successfully</v-alert>
           <v-alert
             class="mt-2"
             dismissible
@@ -121,8 +100,7 @@
             dense
             outlined
             type="error"
-            >{{ message.message }}</v-alert
-          >
+          >{{ message.message }}</v-alert>
         </v-card>
       </v-col>
     </v-row>
@@ -140,7 +118,7 @@ export default {
     return {
       loading: false,
       showPassword: false,
-      user: new User("", "", ""),
+      user: new User("", "", "", null),
       success: false,
       error: false,
       successful: false,
