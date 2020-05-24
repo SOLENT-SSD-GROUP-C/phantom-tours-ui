@@ -235,13 +235,22 @@ export default {
     },
     onDeleteAdmin() {
       this.$store.dispatch("users/deleteUser", parseInt(this.id));
+
       this.openConfirmation = false;
+
+      if (this.currentUser.id == this.id) {
+        this.$store.dispatch("auth/logout");
+        this.$router.push("/login");
+      }
     }
   },
 
   computed: {
     users() {
       return this.$store.getters["users/loadedUsers"];
+    },
+    currentUser() {
+      return this.$store.state.auth.user;
     }
   },
   created() {
