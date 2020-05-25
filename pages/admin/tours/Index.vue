@@ -403,6 +403,9 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
+  async fetch({ store, params }) {
+    await store.dispatch("tours/fetchTours");
+  },
   components: {
     ValidationObserver,
     ValidationProvider
@@ -525,10 +528,8 @@ export default {
     onDeleteTour(id) {
       this.$store.dispatch("tours/deleteTour", id);
     }
-  },
-  async fetch({ store, params }) {
-    await store.dispatch("tours/fetchTours");
   }
+
   // created() {
   //   this.$store.dispatch("tours/fetchTours");
   // }
