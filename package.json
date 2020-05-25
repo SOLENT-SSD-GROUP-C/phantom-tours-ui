@@ -5,8 +5,8 @@
   "author": "iam-amanxz",
   "private": true,
   "engines": {
-    "node": "12.16.13",
-    "npm": "6.13.6"
+    "node": "12.16.x",
+    "npm": "6.13.x"
   },
   "scripts": {
     "dev": "nuxt",
