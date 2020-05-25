@@ -1,7 +1,7 @@
 import colors from "vuetify/es5/util/colors";
 // require("dotenv").config();
 export default {
-  mode: "spa",
+  mode: "universal",
   generate: {
     fallback: true
   },
