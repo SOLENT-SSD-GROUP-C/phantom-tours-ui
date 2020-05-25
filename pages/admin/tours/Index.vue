@@ -526,8 +526,11 @@ export default {
       this.$store.dispatch("tours/deleteTour", id);
     }
   },
-  created() {
-    this.$store.dispatch("tours/fetchTours");
+  async fetch({ store, params }) {
+    await store.dispatch("tours/fetchTours");
   }
+  // created() {
+  //   this.$store.dispatch("tours/fetchTours");
+  // }
 };
 </script>

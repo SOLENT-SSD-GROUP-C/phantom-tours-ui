@@ -65,6 +65,9 @@
 
 <script>
 export default {
+  async fetch({ store, params }) {
+    await store.dispatch("rideouts/fetchRideouts");
+  },
   name: "RideoutComponent",
   layout: "deafult",
   data: () => ({
@@ -126,9 +129,9 @@ export default {
     parsedobj() {
       return JSON.parse(JSON.stringify(this.rideouts));
     }
-  },
-  created() {
-    this.$store.dispatch("rideouts/fetchRideouts");
   }
+  // created() {
+  //   this.$store.dispatch("rideouts/fetchRideouts");
+  // }
 };
 </script>
