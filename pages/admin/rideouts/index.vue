@@ -285,7 +285,7 @@
       </v-row>
 
       <!-- DISPLAY TOURS -->
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <div v-if="rideouts.length > 0">
           <v-col cols="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
             <v-card>
@@ -353,6 +353,9 @@ export default {
   computed: {
     rideouts() {
       return this.$store.getters["rideouts/loadedRideouts"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.rideouts));
     }
   },
   methods: {

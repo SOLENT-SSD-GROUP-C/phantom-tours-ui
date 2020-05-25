@@ -8,7 +8,7 @@
       </v-row>
 
       <!-- DISPLAY BIKES -->
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <v-card
           class="mx-auto my-3"
           outlined
@@ -129,6 +129,9 @@ export default {
   computed: {
     bikes() {
       return this.$store.getters["bikes/loadedBikes"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.bikes));
     }
   },
   methods: {

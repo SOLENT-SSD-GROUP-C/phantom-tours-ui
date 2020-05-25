@@ -3,7 +3,7 @@
     <v-container>
       <h2 class="display-1 my-2">Gallery</h2>
       <v-divider class="my-5"></v-divider>
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <v-col
           cols="12"
           sm="6"
@@ -28,6 +28,9 @@ export default {
   computed: {
     galleryItems() {
       return this.$store.getters["galleryItems/loadedGalleryItems"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.galleryItems));
     }
   },
   created() {

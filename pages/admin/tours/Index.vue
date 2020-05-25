@@ -374,7 +374,7 @@
       </v-row>
 
       <!-- DISPLAY TOURS -->
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <v-col cols="12" sm="6" v-for="tour in tours" :key="tour.tourId">
           <v-card>
             <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
@@ -445,6 +445,9 @@ export default {
   computed: {
     tours() {
       return this.$store.getters["tours/loadedTours"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.tours));
     }
   },
   methods: {

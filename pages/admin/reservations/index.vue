@@ -2,7 +2,7 @@
   <v-app class="mx-5">
     <h1 class="display-1 my-5 font-weight-light">Reservations</h1>
 
-    <v-row>
+    <v-row v-if="parsedobj.length > 0">
       <v-simple-table :fixed-header="fixedHeader" :height="height">
         <template v-slot:default>
           <thead>
@@ -51,6 +51,9 @@ export default {
   computed: {
     reservations() {
       return this.$store.getters["reservations/loadedReservations"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.reservations));
     }
   },
   created() {

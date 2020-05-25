@@ -5,7 +5,7 @@
         <h1 class="display-1 font-weight-light">User Inquiries</h1>
       </v-row>
 
-      <v-row class="px-5">
+      <v-row class="px-5" v-if="parsedobj.length > 0">
         <v-col class="px-5" cols="12" sm="12" v-for="inquiry in inquiries" :key="inquiry.inquiryId">
           <v-card class="mx-auto" outlined dark>
             <v-card-title>{{inquiry.inquiryTitle}}</v-card-title>
@@ -34,6 +34,9 @@ export default {
   computed: {
     inquiries() {
       return this.$store.getters["inquiries/loadedInquiries"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.inquiries));
     }
   },
   methods: {

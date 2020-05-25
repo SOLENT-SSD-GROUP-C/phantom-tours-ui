@@ -13,33 +13,22 @@
       All the adventure tours also offer a wide variety of terrain, making our
       offering as diverse as it is unique.
     </p>
-    <v-row>
+    <v-row v-if="parsedobj.length > 0">
       <v-col cols="12" md="6" v-for="tour in tours" :key="tour.tourId">
         <v-card outlined>
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            :src="tour.tourLocationImageLink"
-          ></v-img>
+          <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink"></v-img>
           <v-card-title>{{ tour.tourTitle }}</v-card-title>
-          <v-card-subtitle style="height:110px; overflow:hidden;" class="pb-0">
-            {{ tour.tourDescription }}
-          </v-card-subtitle>
+          <v-card-subtitle
+            style="height:110px; overflow:hidden;"
+            class="pb-0"
+          >{{ tour.tourDescription }}</v-card-subtitle>
 
           <v-card-actions>
             <v-chip class color="primary ma-2">{{ tour.tourDays }} Days</v-chip>
-            <v-chip class color="primary ma-2"
-              >{{ tour.tourDistance }} Kms</v-chip
-            >
+            <v-chip class color="primary ma-2">{{ tour.tourDistance }} Kms</v-chip>
             <v-chip class color="primary ma-2">{{ tour.tourPrice }} Rs</v-chip>
             <v-spacer></v-spacer>
-            <v-btn
-              color="red"
-              text
-              :to="`/tours/${tour.tourId}`"
-              :tourData="tour"
-              >View More</v-btn
-            >
+            <v-btn color="red" text :to="`/tours/${tour.tourId}`" :tourData="tour">View More</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -54,6 +43,9 @@ export default {
   computed: {
     tours() {
       return this.$store.getters["tours/loadedTours"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.tours));
     }
   },
   created() {

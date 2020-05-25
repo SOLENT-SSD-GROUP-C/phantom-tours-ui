@@ -5,7 +5,7 @@
         <h1 class="display-1 font-weight-light">User Feedbacks</h1>
       </v-row>
 
-      <v-row class="px-5">
+      <v-row class="px-5" v-if="parsedobj.length > 0">
         <v-col
           class="px-5"
           cols="12"
@@ -43,6 +43,9 @@ export default {
   computed: {
     feedbacks() {
       return this.$store.getters["feedbacks/loadedFeedbacks"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.feedbacks));
     }
   },
   methods: {

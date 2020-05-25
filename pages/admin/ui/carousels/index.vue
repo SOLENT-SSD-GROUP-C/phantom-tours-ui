@@ -50,7 +50,7 @@
         </v-dialog>
       </v-row>
 
-      <v-row class="px-5">
+      <v-row class="px-5" v-if="parsedobj.length > 0">
         <v-col class="px-5" v-for="carousel in carousels" :key="carousel.carouselId">
           <v-hover>
             <template v-slot:default="{ hover }">
@@ -87,6 +87,9 @@ export default {
   computed: {
     carousels() {
       return this.$store.getters["carousels/loadedCarousels"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.carousels));
     },
     formIsValid() {
       return this.carouselImageLink !== "";

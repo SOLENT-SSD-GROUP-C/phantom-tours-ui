@@ -8,7 +8,7 @@
       </p>
       <v-divider class="my-5"></v-divider>
 
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <v-col cols="12" v-for="bike in bikes" :key="bike.bikeId">
           <v-card class="d-inline-block mx-auto" outlined width="100%">
             <v-container>
@@ -40,6 +40,9 @@ export default {
   computed: {
     bikes() {
       return this.$store.getters["bikes/loadedBikes"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.bikes));
     }
   },
   created() {

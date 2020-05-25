@@ -50,7 +50,7 @@
         </v-dialog>
       </v-row>
 
-      <v-row>
+      <v-row v-if="parsedobj.length > 0">
         <v-col
           cols="12"
           sm="6"
@@ -93,6 +93,9 @@ export default {
   computed: {
     galleryItems() {
       return this.$store.getters["galleryItems/loadedGalleryItems"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.galleryItems));
     },
     formIsValid() {
       return this.galleryImageLink !== "";

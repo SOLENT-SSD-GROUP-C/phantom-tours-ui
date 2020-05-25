@@ -6,7 +6,7 @@
       Whether you want to go on a shorter adventure tour that covers the outskirts of the mystical Garden Route, or a week-long excursion, our adventure tours cater for every type of rider and adventurer out there. All the adventure tours also offer a wide variety of terrain, making our offering as diverse as it is unique.
     </p>
     <v-divider class="my-5"></v-divider>
-    <v-row>
+    <v-row v-if="parsedobj.length > 0">
       <v-col xs="12" md="6" v-for="rideout in rideouts" :key="rideout.rideoutId">
         <v-card outlined height="445px">
           <v-img
@@ -122,6 +122,9 @@ export default {
     },
     currentUser() {
       return this.$store.state.auth.user;
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.rideouts));
     }
   },
   created() {

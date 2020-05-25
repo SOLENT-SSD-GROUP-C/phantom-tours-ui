@@ -103,6 +103,7 @@
         class="mb-2"
       ></v-text-field>
       <v-data-table
+        v-if="parsedobj.length > 0"
         :headers="headers"
         :search="search"
         :sort-by="['username']"
@@ -159,8 +160,8 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-
 import User from "@/models/user";
+
 export default {
   components: { ValidationProvider, ValidationObserver },
   layout: "admin",
@@ -248,6 +249,9 @@ export default {
   computed: {
     users() {
       return this.$store.getters["users/loadedUsers"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.users));
     },
     currentUser() {
       return this.$store.state.auth.user;
