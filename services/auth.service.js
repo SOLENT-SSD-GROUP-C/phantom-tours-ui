@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:9000/auth/";
+const API_URL = `${process.env.baseURL}/auth/`;
 
 class AuthService {
   login(user) {

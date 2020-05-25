@@ -1,5 +1,5 @@
 import colors from "vuetify/es5/util/colors";
-
+require("dotenv").config();
 export default {
   mode: "universal",
   /*
@@ -34,15 +34,14 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ["@nuxtjs/vuetify"],
+  buildModules: ["@nuxtjs/vuetify", "@nuxtjs/dotenv"],
   /*
    ** Nuxt.js modules
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios",
+    "@nuxtjs/axios"
     // Doc: https://github.com/nuxt-community/dotenv-module
-    "@nuxtjs/dotenv"
   ],
   /*
    ** Axios module configuration
