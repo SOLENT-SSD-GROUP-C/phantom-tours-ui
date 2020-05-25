@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// const PORT = process.env.PORT;
-const API_URL = `${process.env.baseURL}/auth/`;
+const API_URL = `${process.env.baseUrl}/auth/`;
 
 class AuthService {
   login(user) {
