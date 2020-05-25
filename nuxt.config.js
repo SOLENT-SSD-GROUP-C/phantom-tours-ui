@@ -2,9 +2,6 @@ import colors from "vuetify/es5/util/colors";
 // require("dotenv").config();
 export default {
   mode: "universal",
-  // generate: {
-  //   fallback: true
-  // },
   /*
    ** Headers of the page
    */
@@ -46,7 +43,6 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    // "@nuxtjs/dotenv"
     // Doc: https://axios.nuxtjs.org/usage
     "@nuxtjs/axios"
     // Doc: https://github.com/nuxt-community/dotenv-module
