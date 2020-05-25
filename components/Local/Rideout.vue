@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="rideouts && rideouts.length > 0">
+  <v-container>
     <h2 class="display-1 my-2">Upcoming Rideouts</h2>
     <p>
       Take a ride with us on some of the less-travelled roads in Southern Africa. You'll get to discover and experience some of the continent's breath-taking landscapes while challenging your skill and technique on different terrain. Our adventure tours cover a large area of Southern Africa, stretching from the Eastern Cape, to the border of Namibia.
