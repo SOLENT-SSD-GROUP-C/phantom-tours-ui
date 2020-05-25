@@ -4,10 +4,6 @@
   "description": "User Interface of motorcycle tour app with vue and nuxt",
   "author": "iam-amanxz",
   "private": true,
-  "engines": {
-    "node": "12.16.x",
-    "npm": "6.13.x"
-  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
