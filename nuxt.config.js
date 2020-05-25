@@ -44,22 +44,13 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios",
-    "@nuxtjs/proxy"
+    "@nuxtjs/axios"
     // Doc: https://github.com/nuxt-community/dotenv-module
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  proxy: {
-    "/": {
-      target: "https://tours-api.herokuapp.com/",
-      pathRewrite: {
-        "^/": "/"
-      }
-    }
-  },
   axios: {},
   /*
    ** vuetify module configuration
