@@ -1,6 +1,6 @@
-# tour-project-ui
+# Phantom Tours VueJS Nuxt App
 
-> User Interface of motorcycle tour app with vue and nuxt
+**VueJS web appliaction of Group-C for SOFTWARE SYSTEMS DEVELOPMENT (BCC608), Sothamption Solent University**
 
 ## Build Setup
 
