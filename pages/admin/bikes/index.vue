@@ -107,6 +107,7 @@ export default {
   asyncData({ store }) {
     store.dispatch("bikes/fetchBikes");
   },
+  name: "adminBike",
   layout: "admin",
   components: {
     ValidationObserver,

@@ -405,6 +405,7 @@ export default {
   asyncData({ store }) {
     store.dispatch("tours/fetchTours");
   },
+  name: "adminTour",
   layout: "admin",
   components: {
     ValidationObserver,
