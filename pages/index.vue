@@ -2,12 +2,15 @@
   <v-app>
     <v-container>
       <!-- HERO SECTION -->
-      <v-row class="mb-5">
+      <v-row class="mb-5" v-if="parsedobj.length > 0">
         <v-carousel cycle height="400" show-arrows-on-hover>
           <v-carousel-item v-for="carousel in carousels" :key="carousel.carouselId">
             <v-img contain :src="carousel.carouselImageLink" :lazy-src="carousel.carouselImageLink"></v-img>
           </v-carousel-item>
         </v-carousel>
+      </v-row>
+      <v-row v-else>
+        <h2>No Carousel Records Found</h2>
       </v-row>
 
       <!-- INTRO SECTION -->
@@ -31,23 +34,25 @@
 </template>
 
 <script>
-import ServicesComponent from "@/components/Local/Services";
-import TestimonialsComponent from "@/components/Local/Testimonials";
+import ServicesComponent from "@/components/Services";
+import TestimonialsComponent from "@/components/Testimonials";
 
 export default {
+  created() {
+    this.$store.dispatch("carousels/fetchCarousels");
+  },
   layout: "deafult",
   components: {
     appService: ServicesComponent,
     appTestimonial: TestimonialsComponent
   },
-  data: () => ({}),
   computed: {
     carousels() {
       return this.$store.getters["carousels/loadedCarousels"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.carousels));
     }
-  },
-  created() {
-    this.$store.dispatch("carousels/fetchCarousels");
   }
 };
 </script>

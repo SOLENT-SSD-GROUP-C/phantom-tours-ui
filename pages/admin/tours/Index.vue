@@ -1,190 +1,212 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-row align="end" class="my-2">
-        <h1 class="display-1 font-weight-light">Manage Tours</h1>
-        <v-spacer></v-spacer>
-        <v-btn text class="primary" @click="addDialog = true">Add Tour</v-btn>
-      </v-row>
+  <v-container>
+    <v-row align="end" class="my-2">
+      <h1 class="display-1 font-weight-light">Manage Tours</h1>
+      <v-spacer></v-spacer>
+      <v-btn text class="primary" @click="addDialog = true">Add Tour</v-btn>
+    </v-row>
 
-      <!-- CREATE TOUR DIALOG FORM -->
-      <v-row justify="center">
-        <v-dialog v-model="addDialog" persistent max-width="600px">
+    <!-- CREATE TOUR DIALOG FORM -->
+    <v-row justify="center">
+      <v-dialog v-model="addDialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>Create a Tour</v-card-title>
+          <v-card-text>
+            <v-container>
+              <ValidationObserver ref="observer" v-slot="{invalid, reset }">
+                <v-form ref="form" @submit.prevent="onCreateTour">
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <v-text-field v-model="tourTitle" label="Title"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|max:2500">
+                    <v-textarea
+                      v-model="tourDescription"
+                      name="tourDescription"
+                      label="Description"
+                      counter="2500"
+                    ></v-textarea>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <v-text-field
+                      v-model="tourLocationImageLink"
+                      label="Location Image Link"
+                      counter="250"
+                    ></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <v-text-field v-model="tourDays" label="Days"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required">
+                    <v-text-field v-model="tourDistance" label="Distance"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|">
+                    <v-text-field v-model="tourPrice" label="Price"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|between:1,12">
+                    <v-text-field v-model="tourGroupSize" label="Group Size"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                    <v-text-field v-model="tourTerrain" label="Terrain"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                    <v-text-field v-model="tourStartingPoint" label="Starting Point"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
+                    <v-text-field v-model="tourEndingPoint" label="Ending Point"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <v-switch v-model="tourAvailability" label="Availability" inset></v-switch>
+
+                  <ValidationProvider v-slot="{ errors }" rules="required|max:250">
+                    <v-text-field v-model="tourRouteMapLink" label="Route Map Link" counter="250"></v-text-field>
+                    <span>
+                      <v-alert
+                        dismissible
+                        :value="errors.length > 0"
+                        dense
+                        outlined
+                        type="warning"
+                      >{{ errors[0] }}</v-alert>
+                    </span>
+                  </ValidationProvider>
+
+                  <v-btn
+                    :loading="loading"
+                    :disabled="invalid"
+                    class="primary mt-3"
+                    type="submit"
+                  >Create</v-btn>
+                  <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
+                </v-form>
+              </ValidationObserver>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <div v-if="parsedobj.length > 0">
+      <!-- DISPLAY TOURS -->
+      <v-row>
+        <v-col cols="12" sm="6" v-for="tour in tours" :key="tour.tourId">
           <v-card>
-            <v-card-title>Create a Tour</v-card-title>
-            <v-card-text>
-              <v-container>
-                <ValidationObserver ref="observer" v-slot="{invalid, validate, reset }">
-                  <v-form ref="form" @submit.prevent="onCreateTour">
-                    <ValidationProvider v-slot="{ errors }" rules="required">
-                      <v-text-field v-model="tourTitle" label="Title"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
+            <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
+              <v-card-title>{{tour.tourTitle}}</v-card-title>
+            </v-img>
 
-                    <ValidationProvider v-slot="{ errors }" rules="required|max:2500">
-                      <v-textarea
-                        v-model="tourDescription"
-                        name="tourDescription"
-                        label="Description"
-                        counter="2500"
-                      ></v-textarea>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
+            <v-card-subtitle
+              style="height:100px; overflow:hidden;"
+              class="pb-0"
+            >{{tour.tourDescription}}</v-card-subtitle>
 
-                    <ValidationProvider v-slot="{ errors }" rules="required">
-                      <v-text-field
-                        v-model="tourLocationImageLink"
-                        label="Location Image Link"
-                        counter="250"
-                      ></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required">
-                      <v-text-field v-model="tourDays" label="Days"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required">
-                      <v-text-field v-model="tourDistance" label="Distance"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|">
-                      <v-text-field v-model="tourPrice" label="Price"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|between:1,12">
-                      <v-text-field v-model="tourGroupSize" label="Group Size"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
-                      <v-text-field v-model="tourTerrain" label="Terrain"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
-                      <v-text-field v-model="tourStartingPoint" label="Starting Point"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|alpha_spaces">
-                      <v-text-field v-model="tourEndingPoint" label="Ending Point"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <v-switch v-model="tourAvailability" label="Availability" inset></v-switch>
-
-                    <ValidationProvider v-slot="{ errors }" rules="required|max:250">
-                      <v-text-field v-model="tourRouteMapLink" label="Route Map Link" counter="250"></v-text-field>
-                      <span>
-                        <v-alert
-                          dismissible
-                          :value="errors.length > 0"
-                          dense
-                          outlined
-                          type="warning"
-                        >{{ errors[0] }}</v-alert>
-                      </span>
-                    </ValidationProvider>
-
-                    <v-btn
-                      :loading="loading"
-                      :disabled="invalid"
-                      class="primary mt-3"
-                      type="submit"
-                    >Create</v-btn>
-                    <v-btn class="red mt-3" dark @click="cancelForm">Cancel</v-btn>
-                  </v-form>
-                </ValidationObserver>
-              </v-container>
-            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <!-- <v-btn color="primary" text @click="editDialog = true">Edit</v-btn> -->
+              <v-btn color="primary" text @click="handleEditTourButton(tour)">Edit</v-btn>
+              <v-btn color="red" text @click="onDeleteTour(tour.tourId)">Delete</v-btn>
+            </v-card-actions>
           </v-card>
-        </v-dialog>
+        </v-col>
       </v-row>
-
       <!-- EDIT TOUR FORM -->
       <v-row justify="center">
         <v-dialog v-model="editDialog" persistent max-width="600px">
@@ -372,42 +394,22 @@
           </v-card>
         </v-dialog>
       </v-row>
-
-      <!-- DISPLAY TOURS -->
-      <v-row>
-        <v-col cols="12" sm="6" v-for="tour in tours" :key="tour.tourId">
-          <v-card>
-            <v-img class="white--text align-end" height="200px" :src="tour.tourLocationImageLink">
-              <v-card-title>{{tour.tourTitle}}</v-card-title>
-            </v-img>
-
-            <v-card-subtitle
-              style="height:100px; overflow:hidden;"
-              class="pb-0"
-            >{{tour.tourDescription}}</v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <!-- <v-btn color="primary" text @click="editDialog = true">Edit</v-btn> -->
-              <v-btn color="primary" text @click="handleEditTourButton(tour)">Edit</v-btn>
-              <v-btn color="red" text @click="onDeleteTour(tour.tourId)">Delete</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+    </div>
+  </v-container>
 </template>
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
+  asyncData({ store }) {
+    store.dispatch("tours/fetchTours");
+  },
+  layout: "admin",
   components: {
     ValidationObserver,
     ValidationProvider
   },
-  layout: "admin",
   data: () => ({
     loading: false,
     overlay: false,
@@ -441,12 +443,6 @@ export default {
     editedTourAvailability: "",
     editedTourRouteMapLink: ""
   }),
-
-  computed: {
-    tours() {
-      return this.$store.getters["tours/loadedTours"];
-    }
-  },
   methods: {
     cancelForm() {
       this.$refs.form.reset();
@@ -523,8 +519,13 @@ export default {
       this.$store.dispatch("tours/deleteTour", id);
     }
   },
-  created() {
-    this.$store.dispatch("tours/fetchTours");
+  computed: {
+    tours() {
+      return this.$store.getters["tours/loadedTours"];
+    },
+    parsedobj() {
+      return JSON.parse(JSON.stringify(this.tours));
+    }
   }
 };
 </script>

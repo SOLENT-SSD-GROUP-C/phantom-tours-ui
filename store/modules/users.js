@@ -5,7 +5,6 @@ export default {
   state: {
     loadedUsers: []
   },
-
   mutations: {
     INIT_USERS: (state, users) => (state.loadedUsers = users),
     ADD_USER: (state, payload) => {
@@ -22,13 +21,11 @@ export default {
     REMOVE_USER: (state, userId) =>
       (state.loadedUsers = state.loadedUsers.filter(user => user.id !== userId))
   },
-
   actions: {
     async fetchUsers({ commit }) {
       const response = await http.get("/users");
       commit("INIT_USERS", response.data);
     },
-
     async createUser({ commit }, payload) {
       const user = {
         userName: payload.userName,
@@ -48,7 +45,6 @@ export default {
       commit("REMOVE_USER", userId);
     }
   },
-
   getters: {
     loadedUsers(state) {
       return state.loadedUsers;

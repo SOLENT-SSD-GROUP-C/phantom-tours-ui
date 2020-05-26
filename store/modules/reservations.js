@@ -19,8 +19,6 @@ export default {
   actions: {
     async fetchReservations({ commit }) {
       const response = await http.get("reservations");
-      console.log("Res data" + response.data);
-
       commit("INIT_RESERVATIONS", response.data);
     },
     async createReservation({ commit }, payload) {

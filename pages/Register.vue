@@ -13,7 +13,7 @@
             class="profile-img-card"
           />
 
-          <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
+          <ValidationObserver ref="observer" v-slot="{ invalid }">
             <v-form ref="form" @submit.prevent="handleRegister">
               <div v-if="!successful">
                 <div>
@@ -113,6 +113,11 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 
 export default {
   name: "Register",
+  mounted() {
+    if (this.loggedIn) {
+      this.$router.push("/profile");
+    }
+  },
   components: { ValidationProvider, ValidationObserver },
   data() {
     return {
@@ -128,11 +133,6 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
-  },
-  mounted() {
-    if (this.loggedIn) {
-      this.$router.push("/profile");
     }
   },
   methods: {

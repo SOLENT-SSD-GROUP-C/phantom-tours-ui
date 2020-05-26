@@ -9,7 +9,7 @@
       ></v-img>
       <p
         class="title"
-      >Phantom Tours was founded by friends Husnul Aman, Jareer Zeenam, Emaadh Careem, Thilagshana Thilakarasa and Vinushiya Arumugam</p>
+      >Phantom Tours was founded by friends Husnul Aman, Jareer Zeenam, Emaadh Careem, Thilagshana Thilakarasa and Vinushiya Puvanendrarajah</p>
 
       <v-divider class="my-5"></v-divider>
       <p>

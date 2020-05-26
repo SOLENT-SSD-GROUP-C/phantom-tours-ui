@@ -13,7 +13,7 @@
             class="profile-img-card"
           />
           <!-- Form -->
-          <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
+          <ValidationObserver ref="observer" v-slot="{ invalid }">
             <v-form ref="form" @submit.prevent="handleLogin">
               <ValidationProvider rules="required" v-slot="{ errors }">
                 <v-text-field label="username" v-model="user.username"></v-text-field>
@@ -84,11 +84,16 @@ import User from "@/models/user";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
+  name: "Login",
+  asnycData({ router }) {
+    if (this.loggedIn) {
+      router.push("/");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider
   },
-  name: "Login",
   data() {
     return {
       showPassword: false,
@@ -101,11 +106,6 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/");
     }
   },
   methods: {

@@ -38,14 +38,6 @@ export default {
   getters: {
     loadedBikes(state) {
       return state.loadedBikes;
-    },
-
-    loadedBike(state) {
-      return bikeId => {
-        return state.loadedBikes.find(bike => {
-          return bike.bikeId === bikeId;
-        });
-      };
     }
   }
 };

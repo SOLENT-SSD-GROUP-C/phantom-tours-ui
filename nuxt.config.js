@@ -1,5 +1,5 @@
 import colors from "vuetify/es5/util/colors";
-
+// require("dotenv").config();
 export default {
   mode: "universal",
   /*
@@ -18,6 +18,10 @@ export default {
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+  },
+
+  env: {
+    baseUrl: process.env.BASE_URL || "http://localhost:9000"
   },
   /*
    ** Customize the progress-bar color
@@ -40,9 +44,8 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios",
+    "@nuxtjs/axios"
     // Doc: https://github.com/nuxt-community/dotenv-module
-    "@nuxtjs/dotenv"
   ],
   /*
    ** Axios module configuration
@@ -54,7 +57,6 @@ export default {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: false,
       themes: {

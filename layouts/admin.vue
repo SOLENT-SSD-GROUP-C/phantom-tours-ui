@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="admin">
     <!-- SIDE NAV -->
     <v-navigation-drawer
       class="grey lighten-3"
@@ -128,15 +128,15 @@ export default {
       }
     ]
   }),
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    }
-  },
   methods: {
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/login");
+    }
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
     }
   }
 };
