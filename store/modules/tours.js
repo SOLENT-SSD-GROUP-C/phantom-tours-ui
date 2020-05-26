@@ -25,6 +25,7 @@ export default {
   },
   actions: {
     async fetchTours({ commit }) {
+      console.log("fetch");
       const response = await http.get("/tours");
       commit("INIT_TOURS", response.data);
     },
