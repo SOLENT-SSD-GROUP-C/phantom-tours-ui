@@ -19,4 +19,10 @@ $ npm run start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+### Changing the API URL
+In order to change the connection URL for backend, go to `./nuxt.config.js` and provide the API URL in baseUrl under `env` section.
+
+    env: {
+	    baseUrl: process.env.BASE_URL || "http://localhost:9000"
+    }
+
