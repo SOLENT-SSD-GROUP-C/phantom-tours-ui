@@ -154,8 +154,12 @@
 </template>
 
 <script>
-import FeedbackForm from "@/components/Local/FeedbackForm";
+import FeedbackForm from "@/components/FeedbackForm";
+
 export default {
+  components: {
+    appFeedbackForm: FeedbackForm
+  },
   data() {
     return {
       loading: false,
@@ -205,9 +209,6 @@ export default {
         this.loading = false;
       }
     }
-  },
-  components: {
-    appFeedbackForm: FeedbackForm
   },
   computed: {
     tour() {

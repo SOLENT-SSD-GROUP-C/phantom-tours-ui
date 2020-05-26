@@ -8,19 +8,13 @@
       </p>
       <v-divider class="my-5"></v-divider>
 
-      <!-- CONTACT FORM -->
       <v-row>
+        <!-- CONTACT FORM -->
         <v-col sm="12" md="6">
           <ValidationObserver ref="observer" v-slot="{ invalid, reset }">
             <v-form ref="form" @submit.prevent="onFormSubmit">
-              <ValidationProvider
-                rules="required|alpha_spaces"
-                v-slot="{ errors }"
-              >
-                <v-text-field
-                  v-model="userFullName"
-                  label="Full Name"
-                ></v-text-field>
+              <ValidationProvider rules="required|alpha_spaces" v-slot="{ errors }">
+                <v-text-field v-model="userFullName" label="Full Name"></v-text-field>
                 <span>
                   <v-alert
                     dismissible
@@ -28,8 +22,7 @@
                     dense
                     outlined
                     type="warning"
-                    >{{ errors[0] }}</v-alert
-                  >
+                  >{{ errors[0] }}</v-alert>
                 </span>
               </ValidationProvider>
 
@@ -42,20 +35,12 @@
                     dense
                     outlined
                     type="warning"
-                    >{{ errors[0] }}</v-alert
-                  >
+                  >{{ errors[0] }}</v-alert>
                 </span>
               </ValidationProvider>
 
-              <ValidationProvider
-                rules="required|digits:10"
-                v-slot="{ errors }"
-              >
-                <v-text-field
-                  v-model="userPhone"
-                  label="Phone"
-                  required
-                ></v-text-field>
+              <ValidationProvider rules="required|digits:10" v-slot="{ errors }">
+                <v-text-field v-model="userPhone" label="Phone" required></v-text-field>
                 <span>
                   <v-alert
                     dismissible
@@ -63,18 +48,12 @@
                     dense
                     outlined
                     type="warning"
-                    >{{ errors[0] }}</v-alert
-                  >
+                  >{{ errors[0] }}</v-alert>
                 </span>
               </ValidationProvider>
 
               <ValidationProvider rules="required|max:250" v-slot="{ errors }">
-                <v-text-field
-                  v-model="inquiryTitle"
-                  label="Subject"
-                  counter="250"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="inquiryTitle" label="Subject" counter="250" required></v-text-field>
                 <span>
                   <v-alert
                     dismissible
@@ -82,18 +61,12 @@
                     dense
                     outlined
                     type="warning"
-                    >{{ errors[0] }}</v-alert
-                  >
+                  >{{ errors[0] }}</v-alert>
                 </span>
               </ValidationProvider>
 
               <ValidationProvider rules="required|max:1000" v-slot="{ errors }">
-                <v-textarea
-                  counter="1000"
-                  v-model="inquiryBody"
-                  label="Message"
-                  required
-                ></v-textarea>
+                <v-textarea counter="1000" v-model="inquiryBody" label="Message" required></v-textarea>
                 <span>
                   <v-alert
                     dismissible
@@ -101,8 +74,7 @@
                     dense
                     outlined
                     type="warning"
-                    >{{ errors[0] }}</v-alert
-                  >
+                  >{{ errors[0] }}</v-alert>
                 </span>
               </ValidationProvider>
 
@@ -110,11 +82,11 @@
                 :disabled="invalid"
                 :loading="loading"
                 text
+                dark
                 block
-                class="primary"
+                class="primary mt-2"
                 type="submit"
-                >Submit</v-btn
-              >
+              >Submit</v-btn>
               <v-alert
                 class="mt-2"
                 dismissible
@@ -122,8 +94,7 @@
                 dense
                 outlined
                 type="success"
-                >{{ message }}</v-alert
-              >
+              >{{ message }}</v-alert>
             </v-form>
           </ValidationObserver>
         </v-col>
@@ -137,9 +108,7 @@
               src="https://i.imgur.com/A4Wlj5G.jpg"
             ></v-img>
 
-            <v-card-text class="text--primary headline"></v-card-text>
-
-            <v-card-text class="text--primary headline">
+            <v-card-text class="text--primary headline pb-0">
               Call us
               <div class="subtitle-2">
                 <p>Husnul Aman: ☎ +94 (0)11 212 2121</p>
@@ -147,11 +116,9 @@
               </div>
             </v-card-text>
 
-            <v-card-text class="text--primary headline">
+            <v-card-text class="text--primary headline pt-0">
               Physical address
-              <div class="subtitle-2">
-                Phantom Tours (Pty) LTD, Phantom Avanue, Colombo 06, Sri Lanka
-              </div>
+              <div class="subtitle-2">Phantom Tours (Pvt) LTD, Phantom Avanue, Colombo 06, Sri Lanka</div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -165,9 +132,7 @@
       <v-expansion-panels>
         <v-expansion-panel v-for="faq in faqs" :key="faq.question">
           <v-expansion-panel-header>
-            <h2 class="headline mb-2 red--text text--accent-3">
-              {{ faq.question }}
-            </h2>
+            <h2 class="headline mb-2 red--text text--accent-3">{{ faq.question }}</h2>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <p class="subtitle-2 pl-5">{{ faq.answer }}</p>
